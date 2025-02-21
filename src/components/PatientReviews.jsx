@@ -104,7 +104,7 @@ const PatientReviews = () => {
   };
 
   return (
-    <div className="w-full px-4 py-8 md:py-12 lg:py-16 relative">
+    <div className="w-full bg-gray-50 px-4 py-8 md:py-12 lg:py-16 relative">
       {/* Header with higher z-index */}
       <div className="text-center mb-8 md:mb-12 lg:mb-16 relative z-30">
         <h2 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold mb-3 md:mb-4 lg:mb-6 bg-gradient-to-r from-[#1E0B9B] to-[#07CCEC] inline-block text-transparent bg-clip-text leading-tight">

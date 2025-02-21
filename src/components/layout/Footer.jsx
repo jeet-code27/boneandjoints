@@ -4,7 +4,7 @@ import { Facebook, Instagram, Phone, Mail, MapPin, ChevronRight } from 'lucide-r
 
 const Footer = () => {
   return (
-    <div className="footer-wrapper">
+    <div className="footer-wrapper bg-gray-50">
       {/* Image above footer with border */}
       <div className="w-full flex justify-center border-t border-gray-300">
         <div className="container">

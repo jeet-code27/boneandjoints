@@ -12,7 +12,7 @@ import WhyChooseUs from '@/components/WhyChooseUs';
 export default function Home() {
   return (
     <>
-      <main className='bg-white'>
+       
       <ImageSlider />
       <DoctorProfile />
       <StatsComponent />
@@ -21,7 +21,6 @@ export default function Home() {
       <ImageGallerySlider/>
       <PatientReviews/>
       <AppointmentSection/>
-      </main>
     </>
   );
 }

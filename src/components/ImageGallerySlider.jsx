@@ -107,7 +107,7 @@ const ImageGallerySlider = () => {
   }, [handleKeyDown]);
 
   return (
-    <div className="w-full max-w-7xl mx-auto px-4 py-12">
+    <div className="w-full max-w-7xl mx-auto px-4 py-12 bg-gray-50">
       <h2 className="text-5xl font-bold mb-8  text-center  bg-gradient-to-r from-[#1E0B9B] to-[#07CCEC] inline-block text-transparent bg-clip-text">
       Let’s See Our Latest Gallery
       </h2>
