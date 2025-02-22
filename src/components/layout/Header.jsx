@@ -12,7 +12,6 @@ const Header = () => {
   const menuTimeoutRef = useRef(null);
   const submenuTimeoutRef = useRef(null);
 
-  // Updated expertise object with proper URL paths
   const expertise = {
     'Replacement': {
       path: '/replacement',
@@ -83,6 +82,19 @@ const Header = () => {
   const handleMobileSubmenuClick = useCallback((submenu) => {
     setActiveSubmenu(prev => prev === submenu ? '' : submenu);
   }, []);
+
+  // New function to handle category click in mobile view
+  const handleMobileCategoryClick = useCallback((category, data) => {
+    if (window.innerWidth < 1024) { // Check if in mobile view
+      if (activeSubmenu === category) {
+        // If submenu is already open, navigate to category page
+        window.location.href = data.path;
+      } else {
+        // If submenu is closed, open it
+        handleMobileSubmenuClick(category);
+      }
+    }
+  }, [activeSubmenu]);
 
   const contactButtonClasses = "bg-gradient-to-r from-[#1E0B9B] to-[#07CCEC] text-white px-6 py-2 rounded-md hover:shadow-lg transition-all duration-300 shadow-md shadow-blue-500/50 hover:shadow-blue-500/70";
 
@@ -238,6 +250,7 @@ const Header = () => {
               className="lg:hidden bg-white"
             >
               <div className="container mx-auto px-4 pb-4">
+                {/* Regular menu items remain the same */}
                 <Link 
                   href="/"
                   className="block py-2 text-gray-700 hover:text-blue-600 border-b transition-colors"
@@ -271,9 +284,9 @@ const Header = () => {
                     <div className="pl-4">
                       {Object.entries(expertise).map(([category, data]) => (
                         <div key={category}>
-                          <button
-                            onClick={() => handleMobileSubmenuClick(category)}
-                            className="w-full py-2 text-left text-gray-700 hover:text-blue-600 flex justify-between items-center transition-colors"
+                          <div
+                            onClick={() => handleMobileCategoryClick(category, data)}
+                            className="w-full py-2 text-left text-gray-700 hover:text-blue-600 flex justify-between items-center transition-colors cursor-pointer"
                           >
                             {category}
                             <ChevronDown
@@ -282,7 +295,7 @@ const Header = () => {
                                 activeSubmenu === category ? 'rotate-180' : ''
                               }`}
                             />
-                          </button>
+                          </div>
 
                           {activeSubmenu === category && (
                             <div className="pl-4">
@@ -304,6 +317,7 @@ const Header = () => {
                   )}
                 </div>
 
+                {/* Rest of the mobile menu items remain the same */}
                 <Link 
                   href="/conditions"
                   className="block py-2 text-gray-700 hover:text-blue-600 border-b transition-colors"
