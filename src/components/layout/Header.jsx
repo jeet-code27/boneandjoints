@@ -12,15 +12,29 @@ const Header = () => {
   const menuTimeoutRef = useRef(null);
   const submenuTimeoutRef = useRef(null);
 
-  const services = {
+  // Updated expertise object with proper URL paths
+  const expertise = {
     'Replacement': {
-      submenus: ['Hip Replacement', 'Knee Replacement']
+      path: '/replacement',
+      submenus: [
+        { name: 'Hip Replacement', path: '/replacement/hip-replacement' },
+        { name: 'Knee Replacement', path: '/replacement/knee-replacement' }
+      ]
     },
     'Anthroscopy': {
-      submenus: ['Knee Anthroscopy', 'Hip Anthroscopy']
+      path: '/anthroscopy',
+      submenus: [
+        { name: 'Knee Anthroscopy', path: '/anthroscopy/knee-anthroscopy' },
+        { name: 'Hip Anthroscopy', path: '/anthroscopy/hip-anthroscopy' }
+      ]
     },
     'Sports Injury': {
-      submenus: ['Knee Injury', 'Back Injury', 'Sprains']
+      path: '/sports-injury',
+      submenus: [
+        { name: 'Knee Injury', path: '/sports-injury/knee-injury' },
+        { name: 'Back Injury', path: '/sports-injury/back-injury' },
+        { name: 'Sprains', path: '/sports-injury/sprains' }
+      ]
     }
   };
 
@@ -82,7 +96,7 @@ const Header = () => {
           <div className="flex items-center space-x-6">
             <a href="mailto:abhishek.saxena1120@gmail.com" className="flex items-center space-x-2 text-sm hover:text-gray-200 transition-colors">
               <Mail size={16} />
-              <span className="hidden sm:inline"> abhishek.saxena1120@gmail.com</span>
+              <span className="hidden sm:inline">abhishek.saxena1120@gmail.com</span>
             </a>
             <a href="tel:+918618243967" className="flex items-center space-x-2 text-sm hover:text-gray-200 transition-colors">
               <Phone size={16} />
@@ -116,15 +130,15 @@ const Header = () => {
           <div className="flex justify-between items-center h-20">
             <Link href="/" className="flex items-center">
               <div className="relative mt-4">
-              <Image 
-  src="/images/logo.png"
-  alt="Dentist clinic"
-  width={200}
-  height={150}
-  style={{ height: 'auto' }}  
-  className="rounded object-contain"
-  priority
-/>
+                <Image 
+                  src="/images/logo.png"
+                  alt="Dentist clinic"
+                  width={200}
+                  height={150}
+                  style={{ height: 'auto' }}  
+                  className="rounded object-contain"
+                  priority
+                />
               </div>
             </Link>
 
@@ -138,43 +152,46 @@ const Header = () => {
               
               <div 
                 className="relative group"
-                onMouseEnter={() => handleMenuHover('services', true)}
-                onMouseLeave={() => handleMenuHover('services', false)}
+                onMouseEnter={() => handleMenuHover('expertise', true)}
+                onMouseLeave={() => handleMenuHover('expertise', false)}
               >
                 <button className="flex items-center text-gray-700 hover:text-blue-600 transition-colors">
-                  Services
+                  Our Expertise
                   <ChevronDown size={16} className="ml-1" />
                 </button>
                 
-                {activeMenu === 'services' && (
+                {activeMenu === 'expertise' && (
                   <div 
                     className="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50"
                     style={{ marginTop: '0.5rem' }}
                   >
-                    {Object.entries(services).map(([service, { submenus }]) => (
+                    {Object.entries(expertise).map(([category, data]) => (
                       <div 
-                        key={service}
+                        key={category}
                         className="relative group"
-                        onMouseEnter={() => handleSubmenuHover(service, true)}
-                        onMouseLeave={() => handleSubmenuHover(service, false)}
+                        onMouseEnter={() => handleSubmenuHover(category, true)}
+                        onMouseLeave={() => handleSubmenuHover(category, false)}
                       >
-                        <div className="px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 cursor-pointer transition-colors">
-                          {service}
+                        <Link
+                          href={data.path}
+                          className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 cursor-pointer transition-colors"
+                        >
+                          {category}
                           <ChevronDown size={16} className="inline ml-2" />
-                        </div>
+                        </Link>
 
-                        {activeSubmenu === service && (
+                        {activeSubmenu === category && (
                           <div 
                             className="absolute left-full top-0 w-48 bg-white rounded-md shadow-lg"
                             style={{ marginLeft: '0.5rem' }}
                           >
-                            {submenus.map((submenu) => (
+                            {data.submenus.map((submenu) => (
                               <Link
-                                key={submenu}
-                                href={`/services/${service.toLowerCase()}/${submenu.toLowerCase().replace(/\s+/g, '-')}`}
+                                key={submenu.name}
+                                href={submenu.path}
                                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 transition-colors"
                               >
-                                {submenu}
+                                {submenu.name}
                               </Link>
                             ))}
                           </div>
@@ -238,45 +255,45 @@ const Header = () => {
 
                 <div className="border-b">
                   <button
-                    onClick={() => handleMobileMenuClick('services')}
+                    onClick={() => handleMobileMenuClick('expertise')}
                     className="w-full py-2 text-left text-gray-700 hover:text-blue-600 flex justify-between items-center transition-colors"
                   >
-                    Services
+                    Our Expertise
                     <ChevronDown
                       size={16}
                       className={`transform transition-transform duration-300 ${
-                        activeMenu === 'services' ? 'rotate-180' : ''
+                        activeMenu === 'expertise' ? 'rotate-180' : ''
                       }`}
                     />
                   </button>
 
-                  {activeMenu === 'services' && (
+                  {activeMenu === 'expertise' && (
                     <div className="pl-4">
-                      {Object.entries(services).map(([service, { submenus }]) => (
-                        <div key={service}>
+                      {Object.entries(expertise).map(([category, data]) => (
+                        <div key={category}>
                           <button
-                            onClick={() => handleMobileSubmenuClick(service)}
+                            onClick={() => handleMobileSubmenuClick(category)}
                             className="w-full py-2 text-left text-gray-700 hover:text-blue-600 flex justify-between items-center transition-colors"
                           >
-                            {service}
+                            {category}
                             <ChevronDown
                               size={16}
                               className={`transform transition-transform duration-300 ${
-                                activeSubmenu === service ? 'rotate-180' : ''
+                                activeSubmenu === category ? 'rotate-180' : ''
                               }`}
                             />
                           </button>
 
-                          {activeSubmenu === service && (
+                          {activeSubmenu === category && (
                             <div className="pl-4">
-                              {submenus.map((submenu) => (
+                              {data.submenus.map((submenu) => (
                                 <Link
-                                  key={submenu}
-                                  href={`/services/${service.toLowerCase()}/${submenu.toLowerCase().replace(/\s+/g, '-')}`}
+                                  key={submenu.name}
+                                  href={submenu.path}
                                   className="block py-2 text-gray-700 hover:text-blue-600 transition-colors"
                                   onClick={handleMobileMenuToggle}
                                 >
-                                  {submenu}
+                                  {submenu.name}
                                 </Link>
                               ))}
                             </div>
