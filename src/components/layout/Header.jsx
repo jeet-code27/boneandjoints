@@ -20,11 +20,11 @@ const Header = () => {
         { name: 'Knee Replacement', path: '/replacement/knee-replacement' }
       ]
     },
-    'Anthroscopy': {
-      path: '/anthroscopy',
+    'Arthroscopy': {
+      path: '/arthroscopy',
       submenus: [
-        { name: 'Knee Anthroscopy', path: '/anthroscopy/knee-anthroscopy' },
-        { name: 'Hip Anthroscopy', path: '/anthroscopy/hip-anthroscopy' }
+        { name: 'Shoulder Arthroscopy', path: '/arthroscopy/shoulder-arthroscopy' },
+        { name: 'Knee Arthroscopy', path: '/arthroscopy/knee-arthroscopy' }
       ]
     },
     'Sports Injury': {
@@ -100,7 +100,7 @@ const Header = () => {
 
   return (
     <>
-    <div className="h-[100px]"></div> 
+    <div className="h-[96px]"></div> 
     
     <header className="w-full fixed top-0 left-0 z-50 bg-white">
       <div className="w-full bg-gradient-to-r from-[#1E0B9B] to-[#07CCEC] text-white py-2">
@@ -141,17 +141,17 @@ const Header = () => {
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-center h-20">
             <Link href="/" className="flex items-center">
-              <div className="relative mt-4">
-                <Image 
-                  src="/images/logo.png"
-                  alt="Dentist clinic"
-                  width={200}
-                  height={150}
-                  style={{ height: 'auto' }}  
-                  className="rounded object-contain"
-                  priority
-                />
-              </div>
+            <div className="relative">
+  <Image 
+    src="/images/logoo.png"
+    alt="Dentist clinic"
+    width={180}
+    height={150}
+    style={{ width: 'auto', height: 'auto' }}
+    className="rounded object-contain"
+    priority
+  />
+</div>
             </Link>
 
             <div className="hidden lg:flex items-center space-x-8">
@@ -214,21 +214,22 @@ const Header = () => {
                 )}
               </div>
 
-              <Link href="/conditions" className="text-gray-700 hover:text-blue-600 transition-colors">
-                All Conditions
-              </Link>
+             
               <Link href="/nutrition-fitness" className="text-gray-700 hover:text-blue-600 transition-colors">
                 Nutrition & Fitness
               </Link>
               <Link href="/blog" className="text-gray-700 hover:text-blue-600 transition-colors">
                 Blog
               </Link>
+              <Link href="/contact" className="text-gray-700 hover:text-blue-600 transition-colors">
+                Contact us
+              </Link>
               
               <Link 
-                href="/contact"
+                href="/bookconsultation"
                 className={contactButtonClasses}
               >
-                Contact Us
+                Book Consultation
               </Link>
             </div>
 

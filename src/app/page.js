@@ -1,4 +1,5 @@
 // app/page.jsx
+import AllCondition from '@/components/AllConditions';
 import AppointmentSection from '@/components/AppointmentSection';
 import DoctorProfile from '@/components/DoctorProfile';
 import ExpertiseSection from '@/components/ExpertiseSection';
@@ -19,6 +20,7 @@ export default function Home() {
       <ExpertiseSection />
       <WhyChooseUs/>
       <ImageGallerySlider/>
+      <AllCondition/>
       <PatientReviews/>
       <AppointmentSection/>
     </>
