@@ -86,7 +86,7 @@ const procedures = {
     'Hip Labral Tear': {
       title: 'Hip Labral Tear',
       description: 'The hip labrum is a ring of cartilage that helps secure the hip joint. Tears can result from trauma, repetitive movements, or structural abnormalities. Treatment may include arthroscopic repair to restore normal hip function and prevent further damage.',
-      image: '/images/hip-labral-tear.jpg'
+      image: '/images/labral-tear.jpg'
     }
   };
 
