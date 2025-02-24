@@ -96,7 +96,7 @@ const KneeInjury = () => {
             <div className="mb-8">
               <div className="relative aspect-square w-full max-w-2xl mx-auto bg-gray-200 rounded-lg overflow-hidden">
                                <Image
-                                  src="/images/knee-injury.webp"
+                                  src="/images/knee-injuries.webp"
                                   alt="=knee Injury Treatment"
                                   fill
                                   className="object-cover"
