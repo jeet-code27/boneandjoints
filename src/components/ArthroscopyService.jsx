@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const ArthroscopyService = () => {
   return (
@@ -23,15 +24,15 @@ const ArthroscopyService = () => {
         </motion.p>
       </div>
       
-      <div className="grid md:grid-cols-2 gap-16 items-stretch max-w-7xl mx-auto"> {/* Use items-stretch to ensure equal height */}
+      <div className="grid md:grid-cols-2 gap-16 items-stretch max-w-7xl mx-auto">
         {/* Knee Arthroscopy Section */}
         <motion.div 
           initial={{ opacity: 0, x: -50 }} 
           whileInView={{ opacity: 1, x: 0 }} 
           transition={{ duration: 0.5 }}
           viewport={{ once: true }}
-          className="bg-white shadow-2xl rounded-2xl overflow-hidden hover:shadow-3xl transition-shadow duration-300 group flex flex-col h-full"> {/* Add flex and h-full */}
-          <div className="relative h-64 md:h-96 flex-shrink-0"> {/* Ensure consistent image height */}
+          className="bg-white shadow-2xl rounded-2xl overflow-hidden hover:shadow-3xl transition-shadow duration-300 group flex flex-col h-full">
+          <div className="relative h-64 md:h-96 flex-shrink-0">
             <Image 
               src="/images/knee-arthroscopy.webp" 
               alt="Knee Arthroscopy"
@@ -40,7 +41,7 @@ const ArthroscopyService = () => {
               className="rounded-t-2xl group-hover:scale-105 transition-transform duration-300 object-cover"
             />
           </div>
-          <div className="p-8 text-center flex-grow flex flex-col justify-between"> {/* Flex layout for content */}
+          <div className="p-8 text-center flex-grow flex flex-col justify-between">
             <div>
               <h3 className="text-3xl font-bold text-blue-900 mb-4">Knee Arthroscopy</h3>
               <p className="text-gray-600 text-lg mb-6 text-justify">
@@ -58,9 +59,11 @@ const ArthroscopyService = () => {
                 </li>
               </ul>
             </div>
-            <button className="mt-4 px-8 py-3 text-white font-semibold rounded-full bg-gradient-to-r from-blue-900 to-cyan-400 hover:from-cyan-400 hover:to-blue-900 transition-all duration-300">
-              Learn More
-            </button>
+            <Link href="/arthroscopy/knee-arthroscopy">
+              <button className="mt-4 px-8 py-3 text-white font-semibold rounded-full bg-gradient-to-r from-blue-900 to-cyan-400 hover:from-cyan-400 hover:to-blue-900 transition-all duration-300">
+                Learn More
+              </button>
+            </Link>
           </div>
         </motion.div>
         
@@ -70,8 +73,8 @@ const ArthroscopyService = () => {
           whileInView={{ opacity: 1, x: 0 }} 
           transition={{ duration: 0.5 }}
           viewport={{ once: true }}
-          className="bg-white shadow-2xl rounded-2xl overflow-hidden hover:shadow-3xl transition-shadow duration-300 group flex flex-col h-full"> {/* Add flex and h-full */}
-          <div className="relative h-64 md:h-96 flex-shrink-0"> {/* Ensure consistent image height */}
+          className="bg-white shadow-2xl rounded-2xl overflow-hidden hover:shadow-3xl transition-shadow duration-300 group flex flex-col h-full">
+          <div className="relative h-64 md:h-96 flex-shrink-0">
             <Image 
               src="/images/shoulder-arthroscopy.webp" 
               alt="Shoulder Arthroscopy"
@@ -80,11 +83,11 @@ const ArthroscopyService = () => {
               className="rounded-t-2xl group-hover:scale-105 transition-transform duration-300 object-cover"
             />
           </div>
-          <div className="p-8 text-center flex-grow flex flex-col justify-between"> {/* Flex layout for content */}
+          <div className="p-8 text-center flex-grow flex flex-col justify-between">
             <div>
               <h3 className="text-3xl font-bold text-blue-900 mb-4">Shoulder Arthroscopy</h3>
               <p className="text-gray-600 text-justify text-lg mb-6">
-                Shoulder arthroscopy is a highly effective procedure for treating shoulder conditions such as rotator cuff tears, labral tears, and shoulder instability. Dr. Saxena’s expertise ensures precise diagnosis and treatment with minimal downtime.
+                Shoulder arthroscopy is a highly effective procedure for treating shoulder conditions such as rotator cuff tears, labral tears, and shoulder instability. Dr. Saxena's expertise ensures precise diagnosis and treatment with minimal downtime.
               </p>
               <ul className="text-left text-gray-600 mb-6 space-y-2">
                 <li className="flex items-center">
@@ -98,9 +101,11 @@ const ArthroscopyService = () => {
                 </li>
               </ul>
             </div>
-            <button className="mt-4 px-8 py-3 text-white font-semibold rounded-full bg-gradient-to-r from-blue-900 to-cyan-400 hover:from-cyan-400 hover:to-blue-900 transition-all duration-300">
-              Learn More
-            </button>
+            <Link href="/arthroscopy/shoulder-arthroscopy">
+              <button className="mt-4 px-8 py-3 text-white font-semibold rounded-full bg-gradient-to-r from-blue-900 to-cyan-400 hover:from-cyan-400 hover:to-blue-900 transition-all duration-300">
+                Learn More
+              </button>
+            </Link>
           </div>
         </motion.div>
       </div>
@@ -116,9 +121,11 @@ const ArthroscopyService = () => {
         <p className="text-gray-700 text-xl max-w-2xl mx-auto text-justify mb-8">
           If joint pain or instability is affecting your daily life, arthroscopy may be the solution. Schedule a consultation with Dr. Abhishek Saxena today to explore how our advanced arthroscopy techniques can help you regain mobility and live pain-free.
         </p>
-        <button className="px-10 py-4 text-white font-semibold rounded-full bg-gradient-to-r from-blue-900 to-cyan-400 hover:from-cyan-400 hover:to-blue-900 transition-all duration-300">
-          Book a Consultation
-        </button>
+        <Link href="/bookconsultation">
+          <button className="px-10 py-4 text-white font-semibold rounded-full bg-gradient-to-r from-blue-900 to-cyan-400 hover:from-cyan-400 hover:to-blue-900 transition-all duration-300">
+            Book a Consultation
+          </button>
+        </Link>
       </motion.div>
     </section>
   );

@@ -4,6 +4,7 @@ import React from 'react';
 import { Star, Calendar, Award, Phone } from 'lucide-react';
 import AboutHero from '@/components/AboutHero';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const KneeInjury = () => {
   return (
@@ -46,9 +47,11 @@ const KneeInjury = () => {
                 </div>
               </div>
               <div className="mt-4 md:mt-0">
+              <Link href="/bookconsultation">
                 <button className="px-6 py-2 bg-gradient-to-r from-[#1E0B9B] to-[#07CCEC] text-white rounded-lg transition-colors">
                   Book Consultation
                 </button>
+                </Link>
               </div>
             </div>
           </div>
@@ -186,9 +189,11 @@ const KneeInjury = () => {
                 <p className="text-gray-600 mb-4">
                   Don't let a knee injury keep you from your sport. Schedule a comprehensive evaluation with Dr. Abhishek Saxena for expert diagnosis and treatment.
                 </p>
+                <Link href="/bookconsultation">
                 <button className="px-6 py-2 bg-gradient-to-r from-[#1E0B9B] to-[#07CCEC] text-white rounded-lg transition-colors">
                   Book Consultation
                 </button>
+                </Link>
               </section>
             </div>
           </div>

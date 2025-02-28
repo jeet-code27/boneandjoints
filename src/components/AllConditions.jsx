@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import Image from 'next/image';
 
 const procedures = {
     'Slap Tears': {
@@ -141,12 +142,15 @@ const AllCondition = () => {
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
-            className="relative"
+            className="relative w-full h-80"
           >
-            <img
+            <Image
               src={procedures[selectedProcedure]?.image || '/api/placeholder/600/400'}
               alt={selectedProcedure}
-              className="w-full h-full object-cover rounded-lg"
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              priority={selectedProcedure === 'Shoulder Arthroscopy'}
+              className="object-fit rounded-lg"
             />
             <div className="absolute inset-0 bg-gradient-to-r from-blue-900/10 to-cyan-500/10 rounded-lg" />
           </motion.div>
@@ -160,13 +164,7 @@ const AllCondition = () => {
             <p className="text-gray-600 mb-6">
               {procedures[selectedProcedure]?.description || 'Description coming soon...'}
             </p>
-            {/* <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="bg-gradient-to-r from-blue-900 to-cyan-500 text-white px-6 py-3 rounded-lg self-start hover:opacity-90 transition-opacity"
-            >
-              Know More
-            </motion.button> */}
+           
           </motion.div>
         </motion.div>
       </AnimatePresence>

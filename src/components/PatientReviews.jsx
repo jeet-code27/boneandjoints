@@ -34,7 +34,7 @@ const PatientReviews = () => {
       name: "Rajesh Kumar",
       rating: 5,
       date: "January 15, 2025",
-      comment: "Dr. Saxena is an exceptional orthopedic surgeon. After my knee replacement surgery, I was able to walk pain-free within weeks. His expertise and patient care are outstanding.",
+      comment: "Dr. Abhishek Saxena is an exceptional orthopedic surgeon. After my knee replacement surgery, I was able to walk pain-free within weeks. His expertise and patient care are outstanding.",
       procedure: "Total Knee Replacement"
     },
     {
@@ -58,7 +58,7 @@ const PatientReviews = () => {
       name: "Meera Singh",
       rating: 5,
       date: "January 28, 2025",
-      comment: "Dr. Saxena took the time to explain my condition and treatment options thoroughly. His expertise in sports injuries is remarkable. I'm back to playing tennis thanks to him.",
+      comment: "Dr. Abhishek Saxena took the time to explain my condition and treatment options thoroughly. His expertise in sports injuries is remarkable. I'm back to playing tennis thanks to him.",
       procedure: "Sports Injury Treatment"
     }
   ];

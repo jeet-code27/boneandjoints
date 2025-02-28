@@ -43,7 +43,7 @@ const Footer = () => {
               {/* Social Icons */}
               <div className="mt-6 flex space-x-4">
                 <a 
-                  href="https://facebook.com" 
+                  href="https://www.facebook.com/bonesandjoint" 
                   target="_blank" 
                   rel="noopener noreferrer" 
                   className="text-blue-600 hover:text-blue-800 transition-colors duration-300"
@@ -51,7 +51,7 @@ const Footer = () => {
                   <Facebook size={24} />
                 </a>
                 <a 
-                  href="https://instagram.com" 
+                  href="https://www.instagram.com/boneandjoints.in/" 
                   target="_blank" 
                   rel="noopener noreferrer" 
                   className="text-pink-600 hover:text-pink-800 transition-colors duration-300"
@@ -72,7 +72,8 @@ const Footer = () => {
                   { href: "/", text: "Home" },
                   { href: "/about", text: "About Us" },
                   { href: "/contact", text: "Contact Us" },
-                  { href: "/blogs", text: "Blogs" }
+                  { href: "/blogs", text: "Blogs" },
+                  { href: "/nutrition-fitness", text: "Nutrition & Fitness" },
                 ].map((link) => (
                   <li key={link.href} className="group">
                     <Link 

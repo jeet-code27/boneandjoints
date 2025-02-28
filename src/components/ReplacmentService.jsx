@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const ReplacementService = () => {
   return (
@@ -56,9 +57,11 @@ const ReplacementService = () => {
                 <span className="text-cyan-500 mr-2">✔</span> Reduced recovery time
               </li>
             </ul>
+            <Link href="/replacement/knee-replacement">
             <button className="mt-4 px-8 py-3 text-white font-semibold rounded-full bg-gradient-to-r from-blue-900 to-cyan-400 hover:from-cyan-400 hover:to-blue-900 transition-all duration-300">
               Learn More
             </button>
+            </Link>
           </div>
         </motion.div>
         
@@ -94,9 +97,11 @@ const ReplacementService = () => {
                 <span className="text-cyan-500 mr-2">✔</span> Comprehensive rehabilitation plans
               </li>
             </ul>
+            <Link href="/replacement/hip-replacement">
             <button className="mt-4 px-8 py-3 text-white font-semibold rounded-full bg-gradient-to-r from-blue-900 to-cyan-400 hover:from-cyan-400 hover:to-blue-900 transition-all duration-300">
               Learn More
             </button>
+            </Link>
           </div>
         </motion.div>
       </div>
@@ -112,9 +117,11 @@ const ReplacementService = () => {
         <p className="text-gray-700 text-justify text-xl max-w-2xl mx-auto mb-8">
           If joint pain is holding you back, it’s time to take action. Schedule a consultation with Dr. Abhishek Saxena today and explore how our advanced joint solutions can help you regain your mobility and quality of life.
         </p>
+        <Link href="/bookconsultation">
         <button className="px-10 py-4 text-white font-semibold rounded-full bg-gradient-to-r from-blue-900 to-cyan-400 hover:from-cyan-400 hover:to-blue-900 transition-all duration-300">
           Book a Consultation
         </button>
+        </Link>
       </motion.div>
     </section>
   );

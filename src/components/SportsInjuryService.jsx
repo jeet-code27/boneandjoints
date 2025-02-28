@@ -3,6 +3,7 @@
 
 import { motion } from 'framer-motion';
 import Image from 'next/image';
+import Link from 'next/link';
 
 const SportsInjuryService = () => {
   const serviceCards = [
@@ -15,7 +16,8 @@ const SportsInjuryService = () => {
         "Customized rehabilitation programs",
         "Prevention strategies for future injuries"
       ],
-      animation: { x: -50 }
+      animation: { x: -50 },
+      path: "/sports-injury/sprains"
     },
     {
       title: "Back Injuries",
@@ -26,7 +28,8 @@ const SportsInjuryService = () => {
         "Physical therapy and strengthening exercises",
         "Long-term pain management strategies"
       ],
-      animation: { y: 50 }
+      animation: { y: 50 },
+      path: "/sports-injury/back-injury"
     },
     {
       title: "Knee Injuries",
@@ -37,7 +40,8 @@ const SportsInjuryService = () => {
         "Customized rehabilitation plans",
         "Faster recovery and return to sports"
       ],
-      animation: { x: 50 }
+      animation: { x: 50 },
+      path: "/sports-injury/knee-injury"
     }
   ];
 
@@ -98,9 +102,11 @@ const SportsInjuryService = () => {
                   ))}
                 </ul>
               </div>
-              <button className="w-full md:w-auto mt-4 px-6 md:px-8 py-3 text-white font-semibold rounded-full bg-gradient-to-r from-blue-900 to-cyan-400 hover:from-cyan-400 hover:to-blue-900 transition-all duration-300">
-                Learn More
-              </button>
+              <Link href={card.path}>
+                <button className="w-full md:w-auto mt-4 px-6 md:px-8 py-3 text-white font-semibold rounded-full bg-gradient-to-r from-blue-900 to-cyan-400 hover:from-cyan-400 hover:to-blue-900 transition-all duration-300">
+                  Learn More
+                </button>
+              </Link>
             </div>
           </motion.div>
         ))}
@@ -120,9 +126,11 @@ const SportsInjuryService = () => {
         <p className="text-gray-700 text-justify text-lg md:text-xl max-w-2xl mx-auto mb-6 md:mb-8">
           If a sports injury is keeping you from doing what you love, don't wait. Schedule a consultation with Dr. Abhishek Saxena today and explore how our advanced treatment options can help you recover and get back in the game.
         </p>
-        <button className="w-full md:w-auto px-6 md:px-10 py-3 md:py-4 text-white font-semibold rounded-full bg-gradient-to-r from-blue-900 to-cyan-400 hover:from-cyan-400 hover:to-blue-900 transition-all duration-300">
-          Book a Consultation
-        </button>
+        <Link href="/contact">
+          <button className="w-full md:w-auto px-6 md:px-10 py-3 md:py-4 text-white font-semibold rounded-full bg-gradient-to-r from-blue-900 to-cyan-400 hover:from-cyan-400 hover:to-blue-900 transition-all duration-300">
+            Book a Consultation
+          </button>
+        </Link>
       </motion.div>
     </section>
   );

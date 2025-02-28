@@ -11,34 +11,34 @@ const ImageGallerySlider = () => {
   const images = [
     {
       id: 1,
-      url: '/images/kneeinjury.jpg',
-      title: 'Knee Treatment',
-      description: 'Advanced knee injury treatment and rehabilitation'
+      url: '/images/first.jpg',
+      title: '',
+      description: ''
     },
     {
       id: 2,
-      url: '/images/kneeinjury.jpg',
-      title: 'Orthopedic Care',
-      description: 'Specialized orthopedic treatment solutions'
+      url: '/images/second.jpeg',
+      title: '',
+      description: ''
     },
     {
       id: 3,
-      url: '/images/kneeinjury.jpg',
-      title: 'Physical Therapy',
-      description: 'Professional physical therapy services'
+      url: '/images/third.jpeg',
+      title: '',
+      description: ''
     },
     {
       id: 4,
-      url: '/images/kneeinjury.jpg',
-      title: 'Sports Medicine',
-      description: 'Expert sports injury treatment and care'
+      url: '/images/forth.jpg',
+      title: '',
+      description: ''
     },
-    {
-      id: 5,
-      url: '/images/kneeinjury.jpg',
-      title: 'Recovery Programs',
-      description: 'Comprehensive recovery and rehabilitation'
-    }
+    // {
+    //   id: 5,
+    //   url: '/images/kneeinjury.jpg',
+    //   title: 'Recovery Programs',
+    //   description: 'Comprehensive recovery and rehabilitation'
+    // }
   ];
 
   const responsive = {

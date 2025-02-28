@@ -117,7 +117,7 @@ const Header = () => {
             <div className="h-4 w-[1px] bg-white/30"></div>
             <div className="flex items-center space-x-4">
               <a 
-                href="https://facebook.com" 
+                href="https://www.facebook.com/bonesandjoint" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="hover:text-gray-200 transition-colors"
@@ -125,7 +125,7 @@ const Header = () => {
                 <Facebook size={16} />
               </a>
               <a 
-                href="https://instagram.com" 
+                href="https://www.instagram.com/boneandjoints.in/" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 className="hover:text-gray-200 transition-colors"
@@ -319,13 +319,7 @@ const Header = () => {
                 </div>
 
                 {/* Rest of the mobile menu items remain the same */}
-                <Link 
-                  href="/conditions"
-                  className="block py-2 text-gray-700 hover:text-blue-600 border-b transition-colors"
-                  onClick={handleMobileMenuToggle}
-                >
-                  All Conditions
-                </Link>
+               
                 <Link 
                   href="/nutrition-fitness"
                   className="block py-2 text-gray-700 hover:text-blue-600 border-b transition-colors"
@@ -342,10 +336,17 @@ const Header = () => {
                 </Link>
                 <Link 
                   href="/contact"
-                  className={`inline-block mt-4 ${contactButtonClasses}`}
+                  className="block py-2 text-gray-700 hover:text-blue-600 border-b transition-colors"
                   onClick={handleMobileMenuToggle}
                 >
                   Contact Us
+                </Link>
+                <Link 
+                  href="/bookconsultation"
+                  className={`inline-block mt-4 ${contactButtonClasses}`}
+                  onClick={handleMobileMenuToggle}
+                >
+                  Book Consultation
                 </Link>
               </div>
             </motion.div>

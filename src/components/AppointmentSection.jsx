@@ -1,5 +1,6 @@
 import React from 'react';
 import { Calendar } from 'lucide-react';
+import Link from 'next/link';
 
 const AppointmentSection = () => {
   const benefits = [
@@ -49,6 +50,7 @@ const AppointmentSection = () => {
         
         {/* CTA Button */}
         <div className="text-center">
+        <Link href="/bookconsultation">
           <button 
             className="inline-flex items-center px-6 py-2 text-base md:text-lg font-semibold text-blue-900
                       bg-white rounded-lg hover:bg-cyan-50 transition-all duration-300
@@ -57,6 +59,7 @@ const AppointmentSection = () => {
             <Calendar className="w-5 h-5 mr-2" />
             Book Consultation
           </button>
+          </Link>
         </div>
       </div>
     </section>

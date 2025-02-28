@@ -4,6 +4,7 @@ import React from 'react';
 import { Star, Calendar, Award, Phone } from 'lucide-react';
 import Image from 'next/image';
 import AboutHero from '@/components/AboutHero';
+import Link from 'next/link';
 
 const KneeArthroscopy = () => {
   return (
@@ -46,9 +47,11 @@ const KneeArthroscopy = () => {
                 </div>
               </div>
               <div className="mt-4 md:mt-0">
+              <Link href="/bookconsultation">
                 <button className="px-6 py-2 bg-gradient-to-r from-[#1E0B9B] to-[#07CCEC] text-white rounded-lg transition-colors">
                   Book Consultation
                 </button>
+                </Link>
               </div>
             </div>
           </div>
@@ -172,9 +175,11 @@ const KneeArthroscopy = () => {
                 <p className="text-gray-600 mb-4">
                   Experiencing knee pain or limited mobility? Schedule a comprehensive evaluation with Dr. Abhishek Saxena to discuss if knee arthroscopy is right for you.
                 </p>
+                <Link href="/bookconsultation">
                 <button className="px-6 py-2 bg-gradient-to-r from-[#1E0B9B] to-[#07CCEC] text-white rounded-lg transition-colors">
                   Book Consultation
                 </button>
+                </Link>
               </section>
             </div>
           </div>
