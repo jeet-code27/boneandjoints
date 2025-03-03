@@ -418,7 +418,7 @@ const BookingSystem = () => {
             </label>
             {availableSlots[0] === 'Closed' ? (
               <div className="p-4 bg-red-50 text-red-700 border border-red-200 rounded-md">
-                <p className="font-medium">Closed on this day.</p>
+                <p className="font-medium">Clinic Closed on this day.</p>
                 <p className="text-sm mt-1">Please select another date for your appointment.</p>
               </div>
             ) : (

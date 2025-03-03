@@ -356,8 +356,8 @@ const fetchNutritionSubmissions = async () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {booking.location || (booking.consultationType === 'clinic' 
-                          ? 'Axis Joint & Bone Clinic, Dwarka' 
-                          : 'Aakash Healthcare, Dwarka')}
+                          ? 'Dr Abhishek Saxena, near Jeevan Jyoti Hospital, Lajpat Nagar, Ramganj, Ajmer, Rajasthan 305001' 
+                          : 'Jeevan Jyoti Hospital, 19, 26B, Beawar Rd, Nai Basti, Ramganj, Ajmer')}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                         {booking.createdAt ? new Date(booking.createdAt).toLocaleString() : 'N/A'}
