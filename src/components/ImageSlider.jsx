@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import Image from 'next/image';
 import { Slide } from 'react-slideshow-image';
 import 'react-slideshow-image/dist/styles.css';
+import Link from 'next/link';
 
 const slides = [
   {
@@ -125,6 +126,7 @@ export default function ImageSlider() {
                     
                     <div className="pt-4 md:pt-6">
                       {/* Improved button with animation feedback */}
+                      <Link href="/bookconsultation">
                       <button 
                         onClick={handleAppointmentClick}
                         className={`group relative cursor-pointer rounded-full overflow-hidden ${
@@ -145,6 +147,7 @@ export default function ImageSlider() {
                         </span>
                         <span className="absolute bottom-0 left-0 h-0 w-full bg-blue-800 transition-all duration-300 group-hover:h-full"></span>
                       </button>
+                      </Link>
                     </div>
                   </div>
                 </div>

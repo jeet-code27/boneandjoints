@@ -27,13 +27,13 @@ const KneeArthroscopy = () => {
               <div className="flex items-center space-x-4">
                 <div className="h-28 w-24 rounded-full bg-[#C3E1F2] flex items-center justify-center">
                  <div className="relative h-28 w-24">
-                                   <Image
-                                     src="/images/abhishek.png"
-                                     alt="Dr. Abhishek Saxena"
-                                     fill
-                                     className="rounded-full object-cover"
-                                   />
-                                 </div>
+                           <Image
+                               src="/images/abhishek.png"
+                               alt="Dr. Abhishek Saxena"
+                               fill
+                               className="rounded-full object-cover"
+                          />
+                            </div>
                 </div>
                 <div>
                   <h2 className="text-2xl font-bold text-gray-800">Dr. Abhishek Saxena</h2>

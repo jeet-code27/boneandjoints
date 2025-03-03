@@ -3,6 +3,22 @@ import AboutHero from "@/components/AboutHero";
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
+import { initializeApp } from 'firebase/app';
+import { getFirestore, collection, addDoc } from 'firebase/firestore';
+
+// Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyD67pl8RAdt_t306GKS704bVqFHAR78zNE",
+  authDomain: "boneandjoints-17da3.firebaseapp.com",
+  projectId: "boneandjoints-17da3",
+  storageBucket: "boneandjoints-17da3.firebaseapp.com",
+  messagingSenderId: "447832340957",
+  appId: "1:447832340957:web:fc926308e38cfc55459e34"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const db = getFirestore(app);
 
 export default function NutritionFitness(){
     const [formData, setFormData] = useState({
@@ -80,28 +96,20 @@ export default function NutritionFitness(){
         setError('');
     
         try {
-            // Create form data object
-            const formDataObj = new FormData();
-            Object.keys(formData).forEach(key => {
-                formDataObj.append(key, formData[key]);
-            });
-
-            // Google Apps Script URL
-            const scriptURL = 'https://script.google.com/macros/s/AKfycbzxJKbHSuOb5ww7uL94fpvZKC80GUw4J5MHFnNEqplfzir77ymP9gbwrKoFNBhNxZox/exec';
+            // Store submission data in Firebase
+            const submissionData = {
+                ...formData,
+                timestamp: new Date()
+            };
             
-            // Use no-cors mode to bypass CORS restrictions
-            await fetch(scriptURL, {
-                method: 'POST',
-                mode: 'no-cors',
-                body: formDataObj,
-                // Don't set Content-Type header when using FormData and no-cors mode
-            });
-
-           
+            // Add a new document to the "submissions" collection
+            await addDoc(collection(db, "nutritionFormSubmissions"), submissionData);
+            
+            // Mark as submitted
             setIsSubmitted(true);
         } catch (err) {
             setError('There was an error submitting your form. Please try again.');
-            console.error('Submission error:', err);
+            console.error('Firebase submission error:', err);
         } finally {
             setIsLoading(false);
         }
