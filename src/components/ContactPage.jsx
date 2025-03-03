@@ -13,14 +13,14 @@ const ContactPage = () => {
           <div className="md:flex">
             <div className="md:w-1/2 p-8">
               <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-blue-900 to-cyan-400 text-transparent bg-clip-text">Expert Orthopedic Care</h2>
-              <p className="text-xl mb-6">Specialized treatment for all bone and joint conditions with personalized care.</p>
+              <p className="text-xl text-black mb-6">Specialized treatment for all bone and joint conditions with personalized care.</p>
               <div className="flex items-center space-x-2 mb-4">
                 <div className="bg-gradient-to-r from-blue-900 to-cyan-400 p-2 rounded-full">
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                   </svg>
                 </div>
-                <span className="text-lg font-medium">+91 86182 43967</span>
+                <span className="text-lg font-medium text-black">+91 86182 43967</span>
               </div>
               <Link href="/bookconsultation">
               <button className="bg-gradient-to-r from-blue-900 to-cyan-400 text-white font-bold py-3 px-6 rounded-full shadow-md hover:shadow-lg transform hover:-translate-y-1 transition duration-300">

@@ -78,6 +78,11 @@ function BlogContent({ content }) {
     .blog-content p {
       margin-bottom: 1rem;
       line-height: 1.7;
+      color:black;
+    }
+
+    .blog-content {
+    color: black;
     }
   `;
 
