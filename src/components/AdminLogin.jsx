@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { initializeApp, getApps } from 'firebase/app';
 import { 
   getFirestore, 
@@ -9,7 +9,7 @@ import {
   query, 
   orderBy,
   where,
-  Timestamp // Import Timestamp from Firestore
+  Timestamp 
 } from 'firebase/firestore';
 
 // Firebase configuration
@@ -45,10 +45,23 @@ const AdminLogin = () => {
   
   // Booking data state
   const [bookings, setBookings] = useState([]);
+  const [filteredBookings, setFilteredBookings] = useState([]);
   const [nutritionSubmissions, setNutritionSubmissions] = useState([]);
+  const [filteredNutritionSubmissions, setFilteredNutritionSubmissions] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [filterDate, setFilterDate] = useState('');
   const [filterType, setFilterType] = useState('all');
+  const [filterName, setFilterName] = useState('');
+  
+  // Slider state
+  const [bookingsScrollHeight, setBookingsScrollHeight] = useState(0);
+  const [nutritionScrollHeight, setNutritionScrollHeight] = useState(0);
+  const [showBookingsSlider, setShowBookingsSlider] = useState(false);
+  const [showNutritionSlider, setShowNutritionSlider] = useState(false);
+  
+  // Refs for tables
+  const bookingsTableRef = useRef(null);
+  const nutritionTableRef = useRef(null);
   
   // Admin credentials - in a real app, these would not be hardcoded
   const ADMIN_USERNAME = 'admin';
@@ -110,7 +123,38 @@ const AdminLogin = () => {
       fetchBookings();
       fetchNutritionSubmissions();
     }
-  }, [isAuthenticated, filterDate, filterType]);
+  }, [isAuthenticated]);
+  
+  // Apply filters when filter values change
+  useEffect(() => {
+    if (bookings.length > 0) {
+      applyBookingsFilters();
+    }
+  }, [bookings, filterDate, filterType, filterName]);
+  
+  // Apply filters to nutrition submissions when filter values change
+  useEffect(() => {
+    if (nutritionSubmissions.length > 0) {
+      applyNutritionFilters();
+    }
+  }, [nutritionSubmissions, filterName]);
+  
+  // Check if table needs vertical slider
+  useEffect(() => {
+    if (bookingsTableRef.current) {
+      const tableHeight = bookingsTableRef.current.scrollHeight;
+      const containerHeight = 400; // Fixed container height
+      setBookingsScrollHeight(tableHeight);
+      setShowBookingsSlider(tableHeight > containerHeight);
+    }
+    
+    if (nutritionTableRef.current) {
+      const tableHeight = nutritionTableRef.current.scrollHeight;
+      const containerHeight = 400; // Fixed container height
+      setNutritionScrollHeight(tableHeight);
+      setShowNutritionSlider(tableHeight > containerHeight);
+    }
+  }, [filteredBookings, filteredNutritionSubmissions]);
 
   // Fetch bookings from Firestore
   const fetchBookings = async () => {
@@ -119,19 +163,11 @@ const AdminLogin = () => {
     setIsLoading(true);
     
     try {
-      let bookingsQuery = collection(db, "bookings");
-      
-      // Apply filters if they exist
-      if (filterDate) {
-        bookingsQuery = query(bookingsQuery, where("date", "==", filterDate));
-      }
-      
-      if (filterType !== 'all') {
-        bookingsQuery = query(bookingsQuery, where("consultationType", "==", filterType));
-      }
-      
-      // Order by date and time
-      bookingsQuery = query(bookingsQuery, orderBy("date", "desc"), orderBy("timeSlot", "asc"));
+      const bookingsQuery = query(
+        collection(db, "bookings"),
+        orderBy("date", "desc"), 
+        orderBy("timeSlot", "asc")
+      );
       
       const querySnapshot = await getDocs(bookingsQuery);
       const bookingsData = [];
@@ -144,6 +180,7 @@ const AdminLogin = () => {
       });
       
       setBookings(bookingsData);
+      setFilteredBookings(bookingsData);
     } catch (error) {
       console.error("Error fetching bookings:", error);
     } finally {
@@ -152,35 +189,84 @@ const AdminLogin = () => {
   };
 
   // Fetch nutrition form submissions from Firestore
-const fetchNutritionSubmissions = async () => {
-  if (!db) return;
-  
-  try {
-    const submissionsQuery = query(collection(db, "nutritionFormSubmissions"), orderBy("timestamp", "desc"));
-    const querySnapshot = await getDocs(submissionsQuery);
-    const submissionsData = [];
+  const fetchNutritionSubmissions = async () => {
+    if (!db) return;
     
-    querySnapshot.forEach((doc) => {
-      const data = doc.data();
-      submissionsData.push({
-        id: doc.id,
-        ...data,
-        // Convert Firestore Timestamp to JavaScript Date
-        timestamp: data.timestamp?.toDate() || null
+    try {
+      const submissionsQuery = query(
+        collection(db, "nutritionFormSubmissions"), 
+        orderBy("timestamp", "desc")
+      );
+      
+      const querySnapshot = await getDocs(submissionsQuery);
+      const submissionsData = [];
+      
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        submissionsData.push({
+          id: doc.id,
+          ...data,
+          // Convert Firestore Timestamp to JavaScript Date
+          timestamp: data.timestamp?.toDate() || null
+        });
       });
-    });
+      
+      setNutritionSubmissions(submissionsData);
+      setFilteredNutritionSubmissions(submissionsData);
+    } catch (error) {
+      console.error("Error fetching nutrition submissions:", error);
+    }
+  };
+  
+  // Apply filters to bookings
+  const applyBookingsFilters = () => {
+    let filtered = [...bookings];
     
-    setNutritionSubmissions(submissionsData);
-  } catch (error) {
-    console.error("Error fetching nutrition submissions:", error);
-  }
-};
-
+    // Apply date filter
+    if (filterDate) {
+      filtered = filtered.filter(booking => booking.date === filterDate);
+    }
+    
+    // Apply type filter
+    if (filterType !== 'all') {
+      filtered = filtered.filter(booking => booking.consultationType === filterType);
+    }
+    
+    // Apply name filter
+    if (filterName) {
+      const searchTerm = filterName.toLowerCase();
+      filtered = filtered.filter(booking => 
+        booking.fullName?.toLowerCase().includes(searchTerm) || 
+        booking.email?.toLowerCase().includes(searchTerm) || 
+        booking.phoneNumber?.includes(searchTerm)
+      );
+    }
+    
+    setFilteredBookings(filtered);
+  };
+  
+  // Apply filters to nutrition submissions
+  const applyNutritionFilters = () => {
+    let filtered = [...nutritionSubmissions];
+    
+    // Apply name filter to nutrition submissions
+    if (filterName) {
+      const searchTerm = filterName.toLowerCase();
+      filtered = filtered.filter(submission => 
+        submission.fullName?.toLowerCase().includes(searchTerm) || 
+        submission.email?.toLowerCase().includes(searchTerm) || 
+        submission.phoneNumber?.includes(searchTerm)
+      );
+    }
+    
+    setFilteredNutritionSubmissions(filtered);
+  };
 
   // Clear filters
   const clearFilters = () => {
     setFilterDate('');
     setFilterType('all');
+    setFilterName('');
   };
 
   // Handle date filter change
@@ -192,15 +278,27 @@ const fetchNutritionSubmissions = async () => {
   const handleTypeFilterChange = (e) => {
     setFilterType(e.target.value);
   };
+  
+  // Handle name filter change
+  const handleNameFilterChange = (e) => {
+    setFilterName(e.target.value);
+  };
+  
+  // Custom scrollbar handler
+  const handleScroll = (e, setPosition) => {
+    const { scrollTop, scrollHeight, clientHeight } = e.target;
+    const scrollPercentage = (scrollTop / (scrollHeight - clientHeight)) * 100;
+    setPosition(scrollPercentage);
+  };
 
   // Login form
   if (!isAuthenticated) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
-        <div className="max-w-md w-full space-y-8">
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-blue-50 to-indigo-50 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-md w-full space-y-8 bg-white p-10 rounded-xl shadow-lg">
           <div>
-            <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-              Admin Login
+            <h2 className="mt-6 text-center text-3xl font-extrabold text-blue-800">
+              Admin Dashboard
             </h2>
             <p className="mt-2 text-center text-sm text-gray-600">
               Please sign in to access booking details
@@ -208,35 +306,35 @@ const fetchNutritionSubmissions = async () => {
           </div>
           
           {loginError && (
-            <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative">
-              {loginError}
+            <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded-md relative">
+              <strong>Error:</strong> {loginError}
             </div>
           )}
           
           <form className="mt-8 space-y-6" onSubmit={handleLogin}>
-            <div className="rounded-md shadow-sm -space-y-px">
-              <div>
-                <label htmlFor="username" className="sr-only">Username</label>
+            <div className="rounded-md -space-y-px">
+              <div className="mb-4">
+                <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">Username</label>
                 <input
                   id="username"
                   name="username"
                   type="text"
                   required
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                  placeholder="Username"
+                  className="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                  placeholder="Enter your username"
                   value={username}
                   onChange={(e) => setUsername(e.target.value)}
                 />
               </div>
               <div>
-                <label htmlFor="password" className="sr-only">Password</label>
+                <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">Password</label>
                 <input
                   id="password"
                   name="password"
                   type="password"
                   required
-                  className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
-                  placeholder="Password"
+                  className="appearance-none relative block w-full px-3 py-3 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                  placeholder="Enter your password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 />
@@ -246,7 +344,7 @@ const fetchNutritionSubmissions = async () => {
             <div>
               <button
                 type="submit"
-                className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                className="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-700 hover:to-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 ease-in-out shadow-md"
               >
                 Sign in
               </button>
@@ -259,29 +357,38 @@ const fetchNutritionSubmissions = async () => {
 
   // Admin dashboard (shown after successful login)
   return (
-    <div className="min-h-screen my-10 bg-gray-50">
+    <div className="min-h-screen bg-gradient-to-r from-blue-50 to-indigo-50 py-10">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-        <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl sm:text-3xl font-bold text-blue-700">Admin Dashboard</h1>
+        <div className="flex justify-between items-center mb-8 bg-white p-6 rounded-xl shadow-md">
+          <div>
+            <h1 className="text-3xl font-bold text-blue-800">Admin Dashboard</h1>
+            <p className="text-gray-600 mt-1">Manage appointments and submissions</p>
+          </div>
           <button
             onClick={handleLogout}
-            className="bg-red-500 hover:bg-red-600 text-white py-2 px-4 rounded-md text-sm font-medium"
+            className="bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white py-2 px-6 rounded-lg text-sm font-medium shadow-md transition duration-150 ease-in-out flex items-center"
           >
+           
             Logout
           </button>
         </div>
         
         {/* Filters */}
-        <div className="bg-white p-4 rounded-lg shadow-md mb-6">
-          <h2 className="text-xl font-bold text-gray-800 mb-4">Filters</h2>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div className="bg-white p-6 rounded-xl shadow-md mb-8">
+          <h2 className="text-xl font-bold text-blue-800 mb-4 flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+            </svg>
+            Filters
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Date</label>
               <input
                 type="date"
                 value={filterDate}
                 onChange={handleDateFilterChange}
-                className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md p-2 border"
               />
             </div>
             <div>
@@ -289,18 +396,31 @@ const fetchNutritionSubmissions = async () => {
               <select
                 value={filterType}
                 onChange={handleTypeFilterChange}
-                className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md"
+                className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md p-2 border"
               >
                 <option value="all">All Types</option>
                 <option value="clinic">Clinic</option>
                 <option value="hospital">Hospital</option>
               </select>
             </div>
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">Search Name/Email/Phone</label>
+              <input
+                type="text"
+                value={filterName}
+                onChange={handleNameFilterChange}
+                placeholder="Search..."
+                className="shadow-sm focus:ring-blue-500 focus:border-blue-500 block w-full sm:text-sm border-gray-300 rounded-md p-2 border"
+              />
+            </div>
             <div className="flex items-end">
               <button
                 onClick={clearFilters}
-                className="bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded-md text-sm font-medium"
+                className="bg-gray-200 hover:bg-gray-300 text-gray-800 py-2 px-4 rounded-md text-sm font-medium shadow transition duration-150 ease-in-out flex items-center"
               >
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                </svg>
                 Clear Filters
               </button>
             </div>
@@ -308,64 +428,94 @@ const fetchNutritionSubmissions = async () => {
         </div>
         
         {/* Bookings table */}
-        <div className="bg-white rounded-lg shadow-md overflow-hidden mb-8">
-          <h2 className="text-xl font-bold text-gray-800 p-4">Appointment Bookings</h2>
+        <div className="bg-white rounded-xl shadow-md overflow-hidden mb-8">
+          <div className="p-6 border-b border-gray-200">
+            <h2 className="text-xl font-bold text-blue-800 flex items-center">
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              Appointment Bookings
+              <span className="ml-3 text-sm font-normal text-gray-500">
+                ({filteredBookings.length} {filteredBookings.length === 1 ? 'booking' : 'bookings'})
+              </span>
+            </h2>
+          </div>
           {isLoading ? (
             <div className="p-6 text-center">
-              <p className="text-gray-600">Loading bookings...</p>
+              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-blue-500"></div>
+              <p className="text-gray-600 mt-2">Loading bookings...</p>
             </div>
-          ) : bookings.length === 0 ? (
+          ) : filteredBookings.length === 0 ? (
             <div className="p-6 text-center">
-              <p className="text-gray-600">No bookings found.</p>
+              <div className="inline-block rounded-full p-3 bg-gray-100">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                </svg>
+              </div>
+              <p className="text-gray-600 mt-2">No bookings found matching your filters.</p>
+              <button
+                onClick={clearFilters}
+                className="mt-2 text-blue-600 hover:text-blue-800 text-sm font-medium"
+              >
+                Clear filters
+              </button>
             </div>
           ) : (
-            <div className="overflow-x-auto">
-              <table className="min-w-full divide-y divide-gray-200">
-                <thead className="bg-gray-50">
-                  <tr>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Patient</th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contact</th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date & Time</th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
-                    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Booked On</th>
-                  </tr>
-                </thead>
-                <tbody className="bg-white divide-y divide-gray-200">
-                  {bookings.map((booking) => (
-                    <tr key={booking.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm font-medium text-gray-900">{booking.fullName}</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">{booking.phoneNumber}</div>
-                        <div className="text-sm text-gray-500">{booking.email}</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                          booking.consultationType === 'clinic' 
-                            ? 'bg-green-100 text-green-800' 
-                            : 'bg-blue-100 text-blue-800'
-                        }`}>
-                          {booking.consultationType === 'clinic' ? 'Clinic' : 'Hospital'}
-                        </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-gray-900">{formatDate(booking.date)}</div>
-                        <div className="text-sm text-gray-500">{formatTime(booking.timeSlot)}</div>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {booking.location || (booking.consultationType === 'clinic' 
-                          ? 'Dr Abhishek Saxena, near Jeevan Jyoti Hospital, Lajpat Nagar, Ramganj, Ajmer, Rajasthan 305001' 
-                          : 'Jeevan Jyoti Hospital, 19, 26B, Beawar Rd, Nai Basti, Ramganj, Ajmer')}
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {booking.createdAt ? new Date(booking.createdAt).toLocaleString() : 'N/A'}
-                      </td>
+            <div className="relative">
+              <div 
+                className="overflow-y-auto max-h-96 scrollbar-track-transparent scrollbar-thumb-blue-500 scrollbar-thin" 
+                style={{ maxHeight: '400px' }}
+                ref={bookingsTableRef}
+              >
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50 sticky top-0 z-10">
+                    <tr>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Patient</th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contact</th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date & Time</th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
+                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Booked On</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody className="bg-white divide-y divide-gray-200">
+                    {filteredBookings.map((booking) => (
+                      <tr key={booking.id} className="hover:bg-blue-50 transition duration-150">
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm font-medium text-gray-900">{booking.fullName}</div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm text-gray-900">{booking.phoneNumber}</div>
+                          <div className="text-sm text-gray-500">{booking.email}</div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                            booking.consultationType === 'clinic' 
+                              ? 'bg-green-100 text-green-800' 
+                              : 'bg-blue-100 text-blue-800'
+                          }`}>
+                            {booking.consultationType === 'clinic' ? 'Clinic' : 'Hospital'}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          <div className="text-sm text-gray-900">{formatDate(booking.date)}</div>
+                          <div className="text-sm text-gray-500">{formatTime(booking.timeSlot)}</div>
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {booking.location || (booking.consultationType === 'clinic' 
+                            ? 'Dr Abhishek Saxena, near Jeevan Jyoti Hospital, Lajpat Nagar, Ramganj, Ajmer, Rajasthan 305001' 
+                            : 'Jeevan Jyoti Hospital, 19, 26B, Beawar Rd, Nai Basti, Ramganj, Ajmer')}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                          {booking.createdAt ? new Date(booking.createdAt).toLocaleString() : 'N/A'}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              
+             
             </div>
           )}
         </div>
