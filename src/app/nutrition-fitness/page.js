@@ -3,24 +3,10 @@ import AboutHero from "@/components/AboutHero";
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Image from 'next/image';
-import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, addDoc } from 'firebase/firestore';
+import { collection, addDoc } from 'firebase/firestore';
+import { db } from '@/firebase/firebaseConfig'; // Import Firebase config
 
-// Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyD67pl8RAdt_t306GKS704bVqFHAR78zNE",
-  authDomain: "boneandjoints-17da3.firebaseapp.com",
-  projectId: "boneandjoints-17da3",
-  storageBucket: "boneandjoints-17da3.firebaseapp.com",
-  messagingSenderId: "447832340957",
-  appId: "1:447832340957:web:fc926308e38cfc55459e34"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-export default function NutritionFitness(){
+export default function NutritionFitness() {
     const [formData, setFormData] = useState({
         fullName: '',
         email: '',
@@ -32,21 +18,18 @@ export default function NutritionFitness(){
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
-    
+
     // Validate phone number format (exactly 10 digits)
     const validatePhoneNumber = (phone) => {
-        // Check if phone number contains exactly 10 digits
         return /^\d{10}$/.test(phone);
     };
-    
+
     const handleChange = (e) => {
         const { name, value } = e.target;
-        
+
         if (name === 'phoneNumber') {
-            // Clear previous errors when user types
-            setErrors(prev => ({...prev, phoneNumber: ''}));
-            
-            // Only update if input is numeric and no longer than 10 digits
+            setErrors(prev => ({ ...prev, phoneNumber: '' }));
+
             if (value === '' || (/^\d+$/.test(value) && value.length <= 10)) {
                 setFormData(prev => ({
                     ...prev,

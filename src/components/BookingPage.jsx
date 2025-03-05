@@ -1,52 +1,8 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { initializeApp, getApps } from 'firebase/app';
-import { 
-  getFirestore, 
-  collection, 
-  getDocs, 
-  addDoc, 
-  query, 
-  where,
-  enableIndexedDbPersistence
-} from 'firebase/firestore';
-import { getAnalytics } from 'firebase/analytics';
-
-// Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyD67pl8RAdt_t306GKS704bVqFHAR78zNE",
-  authDomain: "boneandjoints-17da3.firebaseapp.com",
-  projectId: "boneandjoints-17da3",
-  storageBucket: "boneandjoints-17da3.firebasestorage.app",
-  messagingSenderId: "447832340957",
-  appId: "1:447832340957:web:fc926308e38cfc55459e34"
-};
-
-// Initialize Firebase only if it hasn't been initialized already
-let app;
-let db;
-
-// Proper initialization with client-side check
-if (typeof window !== 'undefined') {
-  if (!getApps().length) {
-    app = initializeApp(firebaseConfig);
-    db = getFirestore(app);
-    
-    // Only initialize analytics on client side
-    getAnalytics(app);
-    
-    // Enable offline persistence
-    enableIndexedDbPersistence(db)
-      .catch((err) => {
-        console.warn(`Persistence error: ${err.code === 'failed-precondition' ? 
-          'multiple tabs open' : 'not available in this browser'}`);
-      });
-  } else {
-    app = getApps()[0];
-    db = getFirestore(app);
-  }
-}
+import { db } from '../firebase/firebaseConfig'; // Import Firestore instance
+import { collection, getDocs, addDoc, query, where } from 'firebase/firestore';
 
 const BookingSystem = () => {
   // State management

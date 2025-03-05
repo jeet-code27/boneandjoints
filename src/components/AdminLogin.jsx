@@ -1,40 +1,13 @@
 'use client';
 
 import React, { useState, useEffect, useRef } from 'react';
-import { initializeApp, getApps } from 'firebase/app';
+import { db } from '@/firebase/firebaseConfig'; // Import Firestore instance
 import { 
-  getFirestore, 
   collection, 
   getDocs, 
   query, 
-  orderBy,
-  where,
-  Timestamp 
+  orderBy
 } from 'firebase/firestore';
-
-// Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyD67pl8RAdt_t306GKS704bVqFHAR78zNE",
-  authDomain: "boneandjoints-17da3.firebaseapp.com",
-  projectId: "boneandjoints-17da3",
-  storageBucket: "boneandjoints-17da3.firebasestorage.app",
-  messagingSenderId: "447832340957",
-  appId: "1:447832340957:web:fc926308e38cfc55459e34"
-};
-
-// Initialize Firebase
-let app;
-let db;
-
-if (typeof window !== 'undefined') {
-  if (!getApps().length) {
-    app = initializeApp(firebaseConfig);
-    db = getFirestore(app);
-  } else {
-    app = getApps()[0];
-    db = getFirestore(app);
-  }
-}
 
 const AdminLogin = () => {
   // Authentication state
