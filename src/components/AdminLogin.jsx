@@ -447,7 +447,7 @@ const AdminLogin = () => {
                       <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contact</th>
                       <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
                       <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date & Time</th>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Location</th>
+                     
                       <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Booked On</th>
                     </tr>
                   </thead>
@@ -474,11 +474,11 @@ const AdminLogin = () => {
                           <div className="text-sm text-gray-900">{formatDate(booking.date)}</div>
                           <div className="text-sm text-gray-500">{formatTime(booking.timeSlot)}</div>
                         </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                        {/* <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                           {booking.location || (booking.consultationType === 'clinic' 
                             ? 'Dr Abhishek Saxena, near Jeevan Jyoti Hospital, Lajpat Nagar, Ramganj, Ajmer, Rajasthan 305001' 
                             : 'Jeevan Jyoti Hospital, 19, 26B, Beawar Rd, Nai Basti, Ramganj, Ajmer')}
-                        </td>
+                        </td> */}
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                           {booking.createdAt ? new Date(booking.createdAt).toLocaleString() : 'N/A'}
                         </td>

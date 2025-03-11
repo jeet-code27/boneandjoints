@@ -18,6 +18,10 @@ const BookingSystem = () => {
   const [message, setMessage] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   const [firestoreReady, setFirestoreReady] = useState(false);
+  // Add these state variables for validation
+const [nameError, setNameError] = useState('');
+const [phoneError, setPhoneError] = useState('');
+const [emailError, setEmailError] = useState('');
 
   // Check if we're on client side and set Firestore as ready
   useEffect(() => {
@@ -225,6 +229,46 @@ const BookingSystem = () => {
     return consultationHours[consultationType][dayOfWeek].location;
   };
 
+  // Validation functions
+const validateName = (name) => {
+  if (!name.trim()) {
+    setNameError('Full Name is required');
+    return false;
+  }
+  if (!/^[a-zA-Z\s]*$/.test(name)) {
+    setNameError('Name should only contain letters and spaces');
+    return false;
+  }
+  setNameError('');
+  return true;
+};
+
+const validatePhone = (phone) => {
+  if (!phone.trim()) {
+    setPhoneError('Phone Number is required');
+    return false;
+  }
+  if (!/^\d{10}$/.test(phone)) {
+    setPhoneError('Phone Number should be 10 digits');
+    return false;
+  }
+  setPhoneError('');
+  return true;
+};
+
+const validateEmail = (email) => {
+  if (!email.trim()) {
+    setEmailError('Email Address is required');
+    return false;
+  }
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    setEmailError('Invalid Email Address');
+    return false;
+  }
+  setEmailError('');
+  return true;
+};
+
   // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -246,6 +290,15 @@ const BookingSystem = () => {
     
     if (bookedSlots.includes(selectedSlot)) {
       setErrorMessage("This time slot is already booked. Please select another slot.");
+      return;
+    }
+    
+    // Validate personal information
+    const isNameValid = validateName(fullName);
+    const isPhoneValid = validatePhone(phoneNumber);
+    const isEmailValid = validateEmail(email);
+    
+    if (!isNameValid || !isPhoneValid || !isEmailValid) {
       return;
     }
     
@@ -360,7 +413,7 @@ const BookingSystem = () => {
               min={getMinDate()}
               value={selectedDate}
               onChange={(e) => setSelectedDate(e.target.value)}
-              className="shadow border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="shadow border rounded w-full py-3 px-4 w-[26%] text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
             />
           </div>
@@ -406,73 +459,85 @@ const BookingSystem = () => {
         
         {/* Personal Information */}
         {selectedSlot && selectedSlot !== 'Closed' && (
-          <div className="space-y-4">
-            <div className="p-4 bg-yellow-50 border border-yellow-200 text-yellow-800 rounded-md mb-4">
-              <p className="font-medium">Your appointment details:</p>
-              <p className="mt-1">
-                <span className="font-bold">{consultationType === 'clinic' ? 'Clinic' : 'Hospital'}</span> appointment on{' '}
-                <span className="font-bold">{new Date(selectedDate).toLocaleDateString('en-US', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})}</span> at{' '}
-                <span className="font-bold">{formatTime(selectedSlot)}</span>
-              </p>
-              <p className="text-sm mt-1">{getConsultationLocation()}</p>
-            </div>
-            
-            <div>
-              <label className="block text-gray-700 font-bold mb-2">
-                Full Name*
-              </label>
-              <input
-                type="text"
-                value={fullName}
-                onChange={(e) => setFullName(e.target.value)}
-                className="shadow border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                required
-              />
-            </div>
-            
-            <div>
-              <label className="block text-gray-700 font-bold mb-2">
-                Phone Number*
-              </label>
-              <input
-                type="tel"
-                value={phoneNumber}
-                onChange={(e) => setPhoneNumber(e.target.value)}
-                className="shadow border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="e.g. 9876543210"
-                required
-              />
-            </div>
-            
-            <div>
-              <label className="block text-gray-700 font-bold mb-2">
-                Email Address*
-              </label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="shadow border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                required
-              />
-            </div>
-            
-            <button
-              type="submit"
-              disabled={isLoading || !firestoreReady}
-              className={`w-full py-3 px-4 rounded-md transition-all ${
-                isLoading || !firestoreReady
-                  ? 'bg-blue-400 cursor-not-allowed'
-                  : 'bg-blue-600 hover:bg-blue-700'
-              } text-white font-bold text-lg shadow-md`}
-            >
-              {isLoading ? 'Processing...' : 'Confirm Appointment'}
-            </button>
-            
-            <p className="text-center text-sm text-gray-600 mt-2">
-              You will receive a confirmation via SMS and email.
-            </p>
-          </div>
+         <div className="space-y-4">
+         <div className="p-4 bg-yellow-50 border border-yellow-200 text-yellow-800 rounded-md mb-4">
+           <p className="font-medium">Your appointment details:</p>
+           <p className="mt-1">
+             <span className="font-bold">{consultationType === 'clinic' ? 'Clinic' : 'Hospital'}</span> appointment on{' '}
+             <span className="font-bold">{new Date(selectedDate).toLocaleDateString('en-US', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'})}</span> at{' '}
+             <span className="font-bold">{formatTime(selectedSlot)}</span>
+           </p>
+           <p className="text-sm mt-1">{getConsultationLocation()}</p>
+         </div>
+         
+         <div>
+           <label className="block text-gray-700 font-bold mb-2">
+             Full Name*
+           </label>
+           <input
+             type="text"
+             value={fullName}
+             onChange={(e) => {
+               setFullName(e.target.value);
+               validateName(e.target.value);
+             }}
+             className="shadow border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+             required
+           />
+           {nameError && <p className="text-red-500 text-sm mt-1">{nameError}</p>}
+         </div>
+         
+         <div>
+           <label className="block text-gray-700 font-bold mb-2">
+             Phone Number*
+           </label>
+           <input
+             type="tel"
+             value={phoneNumber}
+             onChange={(e) => {
+               setPhoneNumber(e.target.value);
+               validatePhone(e.target.value);
+             }}
+             className="shadow border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+             placeholder="e.g. 9876543210"
+             required
+           />
+           {phoneError && <p className="text-red-500 text-sm mt-1">{phoneError}</p>}
+         </div>
+         
+         <div>
+           <label className="block text-gray-700 font-bold mb-2">
+             Email Address*
+           </label>
+           <input
+             type="email"
+             value={email}
+             onChange={(e) => {
+               setEmail(e.target.value);
+               validateEmail(e.target.value);
+             }}
+             className="shadow border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+             required
+           />
+           {emailError && <p className="text-red-500 text-sm mt-1">{emailError}</p>}
+         </div>
+         
+         <button
+           type="submit"
+           disabled={isLoading || !firestoreReady}
+           className={`w-full py-3 px-4 rounded-md transition-all ${
+             isLoading || !firestoreReady
+               ? 'bg-blue-400 cursor-not-allowed'
+               : 'bg-blue-600 hover:bg-blue-700'
+           } text-white font-bold text-lg shadow-md`}
+         >
+           {isLoading ? 'Processing...' : 'Confirm Appointment'}
+         </button>
+         
+         <p className="text-center text-sm text-gray-600 mt-2">
+           You will receive a confirmation via SMS and email.
+         </p>
+       </div>
         )}
       </form>
     </div>
