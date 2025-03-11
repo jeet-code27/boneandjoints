@@ -404,7 +404,7 @@ const validateEmail = (email) => {
         
         {/* Date Selection */}
         {consultationType && (
-          <div>
+          <div className='w-[27%]'>
             <label className="block text-gray-700 font-bold mb-2">
               Select Date*
             </label>
@@ -413,7 +413,7 @@ const validateEmail = (email) => {
               min={getMinDate()}
               value={selectedDate}
               onChange={(e) => setSelectedDate(e.target.value)}
-              className="shadow border rounded w-full py-3 px-4 w-[26%] text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="shadow border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               required
             />
           </div>
