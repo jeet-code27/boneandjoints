@@ -6,7 +6,6 @@ import ElfsightWidget from '@/components/ElfsightWidget';
 import ExpertiseSection from '@/components/ExpertiseSection';
 import ImageGallerySlider from '@/components/ImageGallerySlider';
 import ImageSlider from '@/components/ImageSlider';
-import PatientReviews from '@/components/PatientReviews';
 import StatsComponent from '@/components/StatsComponent';
 import WhyChooseUs from '@/components/WhyChooseUs';
 

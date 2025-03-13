@@ -2,6 +2,7 @@
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import './globals.css';
+import FloatingContact from '@/components/layout/FloatingContact';
 
 export const metadata = {
   metadataBase: new URL('https://boneandjoints.in'),
@@ -19,6 +20,7 @@ export default function RootLayout({ children }) {
       <body>
         <Header />
         <main className='bg-gray-50'>{children}</main>
+        <FloatingContact/>
         <Footer />
       </body>
     </html>
