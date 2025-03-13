@@ -2,6 +2,7 @@
 import AllCondition from '@/components/AllConditions';
 import AppointmentSection from '@/components/AppointmentSection';
 import DoctorProfile from '@/components/DoctorProfile';
+import ElfsightWidget from '@/components/ElfsightWidget';
 import ExpertiseSection from '@/components/ExpertiseSection';
 import ImageGallerySlider from '@/components/ImageGallerySlider';
 import ImageSlider from '@/components/ImageSlider';
@@ -21,7 +22,8 @@ export default function Home() {
       <WhyChooseUs/>
       <ImageGallerySlider/>
       <AllCondition/>
-      <PatientReviews/>
+      <ElfsightWidget/>
+   
       <AppointmentSection/>
     </>
   );

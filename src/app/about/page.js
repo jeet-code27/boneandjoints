@@ -1,8 +1,8 @@
 import AboutDoctor from "@/components/AboutDoctor";
 import AboutHero from "@/components/AboutHero";
 import AppointmentSection from "@/components/AppointmentSection";
+import ElfsightWidget from "@/components/ElfsightWidget";
 import ExpertiseSection from "@/components/ExpertiseSection";
-import PatientReviews from "@/components/PatientReviews";
 import StatsComponent from "@/components/StatsComponent";
 
 export default function AboutPage() {
@@ -20,7 +20,8 @@ export default function AboutPage() {
       <AboutDoctor doctorImage="/images/abhishek.png" />
       <StatsComponent/>
       <ExpertiseSection/>
-      <PatientReviews/>
+      <ElfsightWidget/>
+      
       <AppointmentSection/>
       </>  
     );
