@@ -470,40 +470,46 @@ const validateEmail = (email) => {
            <p className="text-sm mt-1">{getConsultationLocation()}</p>
          </div>
          
-         <div>
-           <label className="block text-gray-700 font-bold mb-2">
-             Full Name*
-           </label>
-           <input
-             type="text"
-             value={fullName}
-             onChange={(e) => {
-               setFullName(e.target.value);
-               validateName(e.target.value);
-             }}
-             className="shadow border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-             required
-           />
-           {nameError && <p className="text-red-500 text-sm mt-1">{nameError}</p>}
-         </div>
+        {/* Full Name Input */}
+<div>
+  <label className="block text-gray-700 font-bold mb-2">
+    Full Name*
+  </label>
+  <input
+    type="text"
+    value={fullName}
+    onChange={(e) => {
+      const value = e.target.value.replace(/[^a-zA-Z\s]/g, ''); // Allow only letters and spaces
+      setFullName(value);
+      validateName(value);
+    }}
+    className="shadow border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+    required
+  />
+  {nameError && <p className="text-red-500 text-sm mt-1">{nameError}</p>}
+</div>
          
-         <div>
-           <label className="block text-gray-700 font-bold mb-2">
-             Phone Number*
-           </label>
-           <input
-             type="tel"
-             value={phoneNumber}
-             onChange={(e) => {
-               setPhoneNumber(e.target.value);
-               validatePhone(e.target.value);
-             }}
-             className="shadow border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-             placeholder="e.g. 9876543210"
-             required
-           />
-           {phoneError && <p className="text-red-500 text-sm mt-1">{phoneError}</p>}
-         </div>
+       
+{/* Phone Number Input */}
+<div>
+  <label className="block text-gray-700 font-bold mb-2">
+    Phone Number*
+  </label>
+  <input
+    type="tel"
+    value={phoneNumber}
+    onChange={(e) => {
+      const value = e.target.value.replace(/\D/g, ''); // Allow only digits
+      setPhoneNumber(value);
+      validatePhone(value);
+    }}
+    className="shadow border rounded w-full py-3 px-4 text-gray-700 leading-tight focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+    placeholder="e.g. 9876543210"
+    maxLength="10" // Limit to 10 digits
+    required
+  />
+  {phoneError && <p className="text-red-500 text-sm mt-1">{phoneError}</p>}
+</div>
          
          <div>
            <label className="block text-gray-700 font-bold mb-2">
