@@ -216,7 +216,7 @@ const [emailError, setEmailError] = useState('');
   const getMinDate = () => {
     const today = new Date();
     const minDate = new Date(today);
-    minDate.setDate(today.getDate() + 2); // At least two days in advance
+    minDate.setDate(today.getDate() + 1); // At least one days in advance
     return minDate.toISOString().split('T')[0];
   };
 
@@ -270,70 +270,75 @@ const validateEmail = (email) => {
 };
 
   // Handle form submission
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+ // Handle form submission
+ const handleSubmit = async (e) => {
+  e.preventDefault();
+  
+  if (!firestoreReady || !db) {
+    setErrorMessage("Database connection is not ready. Please refresh the page and try again.");
+    return;
+  }
+  
+  if (!consultationType || !selectedDate || !selectedSlot || !fullName || !phoneNumber || !email) {
+    setErrorMessage("Please fill in all required fields.");
+    return;
+  }
+  
+  if (selectedSlot === 'Closed') {
+    setErrorMessage("The selected day is closed for consultations.");
+    return;
+  }
+  
+  if (bookedSlots.includes(selectedSlot)) {
+    setErrorMessage("This time slot is already booked. Please select another slot.");
+    return;
+  }
+  
+  // Validate personal information
+  const isNameValid = validateName(fullName);
+  const isPhoneValid = validatePhone(phoneNumber);
+  const isEmailValid = validateEmail(email);
+  
+  if (!isNameValid || !isPhoneValid || !isEmailValid) {
+    return;
+  }
+  
+  setIsLoading(true);
+  setErrorMessage('');
+  
+  try {
+    // Add booking to Firestore with a status field
+    await addDoc(collection(db, "bookings"), {
+      consultationType,
+      date: selectedDate,
+      timeSlot: selectedSlot,
+      fullName,
+      phoneNumber,
+      email,
+      location: getConsultationLocation(),
+      createdAt: new Date().toISOString(),
+      status: "pending" // Add the status field with a default value
+    });
     
-    if (!firestoreReady || !db) {
-      setErrorMessage("Database connection is not ready. Please refresh the page and try again.");
-      return;
-    }
+    // Reset form
+    setSelectedSlot('');
+    setFullName('');
+    setPhoneNumber('');
+    setEmail('');
+    setMessage("Booking successful! We will send a confirmation to your email shortly. Please arrive 15 minutes before your scheduled appointment time.");
     
-    if (!consultationType || !selectedDate || !selectedSlot || !fullName || !phoneNumber || !email) {
-      setErrorMessage("Please fill in all required fields.");
-      return;
-    }
+    // Scroll to the top to show the success message
+    window.scrollTo(0, 0);
     
-    if (selectedSlot === 'Closed') {
-      setErrorMessage("The selected day is closed for consultations.");
-      return;
-    }
-    
-    if (bookedSlots.includes(selectedSlot)) {
-      setErrorMessage("This time slot is already booked. Please select another slot.");
-      return;
-    }
-    
-    // Validate personal information
-    const isNameValid = validateName(fullName);
-    const isPhoneValid = validatePhone(phoneNumber);
-    const isEmailValid = validateEmail(email);
-    
-    if (!isNameValid || !isPhoneValid || !isEmailValid) {
-      return;
-    }
-    
-    setIsLoading(true);
-    setErrorMessage('');
-    
-    try {
-      // Add booking to Firestore
-      await addDoc(collection(db, "bookings"), {
-        consultationType,
-        date: selectedDate,
-        timeSlot: selectedSlot,
-        fullName,
-        phoneNumber,
-        email,
-        location: getConsultationLocation(),
-        createdAt: new Date().toISOString()
-      });
-      
-      // Reset form
-      setSelectedSlot('');
-      setFullName('');
-      setPhoneNumber('');
-      setEmail('');
-      setMessage("Booking successful! We will send a confirmation to your email and phone number shortly. Please arrive 15 minutes before your scheduled appointment time.");
-      
-      // Refresh booked slots
-      fetchBookedSlots(selectedDate);
-    } catch (error) {
-      console.error("Error adding booking:", error);
-      setErrorMessage("Failed to book appointment. Please try again.");
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    // Refresh booked slots
+    fetchBookedSlots(selectedDate);
+  } catch (error) {
+    console.error("Error adding booking:", error);
+    setErrorMessage("Failed to book appointment. Please try again.");
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   return (
     <div className="max-w-4xl mx-auto p-4 mt-6 sm:p-6 bg-gray-50 rounded-lg shadow-lg">
@@ -362,9 +367,11 @@ const validateEmail = (email) => {
         <ul className="list-disc pl-5 space-y-1">
           <li>Please arrive 15 minutes before your scheduled appointment</li>
           <li>Bring any previous medical reports or imaging studies</li>
-          <li>A confirmation SMS and email will be sent within 24 hours of booking</li>
+          <li>A confirmation email will be sent within 24 hours of booking</li>
           <li>Rescheduling requires at least 24 hours notice</li>
           <li>Consultation duration is approximately 15-20 minutes</li>
+          <li>Please enter a valid email to receive a confirmation email.</li>  
+
         </ul>
       </div>
       
@@ -518,6 +525,7 @@ const validateEmail = (email) => {
            <input
              type="email"
              value={email}
+             placeholder='Please enter a valid email to receive a confirmation email.'
              onChange={(e) => {
                setEmail(e.target.value);
                validateEmail(e.target.value);

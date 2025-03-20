@@ -13,6 +13,7 @@ export default function NutritionFitness() {
         phoneNumber: ''
     });
     const [errors, setErrors] = useState({
+        fullName: '',
         phoneNumber: ''
     });
     const [isSubmitted, setIsSubmitted] = useState(false);
@@ -24,6 +25,11 @@ export default function NutritionFitness() {
         return /^\d{10}$/.test(phone);
     };
 
+    // Validate name format (only alphabets and spaces)
+    const validateName = (name) => {
+        return /^[A-Za-z\s]+$/.test(name);
+    };
+
     const handleChange = (e) => {
         const { name, value } = e.target;
 
@@ -31,6 +37,13 @@ export default function NutritionFitness() {
             setErrors(prev => ({ ...prev, phoneNumber: '' }));
 
             if (value === '' || (/^\d+$/.test(value) && value.length <= 10)) {
+                setFormData(prev => ({
+                    ...prev,
+                    [name]: value
+                }));
+            }
+        } else if (name === 'fullName') {
+            if (value === '' || validateName(value)) {
                 setFormData(prev => ({
                     ...prev,
                     [name]: value
@@ -62,9 +75,32 @@ export default function NutritionFitness() {
             }
         }
     }, [formData.phoneNumber]);
+
+    // Live validation for full name
+    useEffect(() => {
+        if (formData.fullName && formData.fullName.length > 0) {
+            if (!validateName(formData.fullName)) {
+                setErrors(prev => ({
+                    ...prev, 
+                    fullName: 'Name should contain only alphabets and spaces'
+                }));
+            } else {
+                setErrors(prev => ({...prev, fullName: ''}));
+            }
+        }
+    }, [formData.fullName]);
     
     const handleSubmit = async (e) => {
         e.preventDefault();
+        
+        // Validate full name before submission
+        if (!validateName(formData.fullName)) {
+            setErrors(prev => ({
+                ...prev, 
+                fullName: 'Name should contain only alphabets and spaces'
+            }));
+            return;
+        }
         
         // Validate phone number before submission
         if (!validatePhoneNumber(formData.phoneNumber)) {
@@ -126,22 +162,21 @@ export default function NutritionFitness() {
         },
         { 
             id: 4, 
-            name: 'Health Benefits of Plantar Fasciitis Exercises', 
-            description: 'Learn how specific exercises can help with plantar fasciitis and overall foot health', 
+            name: 'Pelvic Lift & Hip Flexion: Simple Exercises for Stronger Joints', 
+            description: 'Strengthen your hips and core with easy step-by-step exercises for better mobility and joint health', 
             color: 'bg-red-500', 
             imagePath: '/images/plantar-fasciitis-benefits.jpg', 
             resourceTitle: 'plantar-fasciitis-benefits.jpg'
         },
         { 
             id: 5, 
-            name: 'Health Benefits of Plantar Fasciitis Exercises', 
-            description: 'Explore the positive effects of plantar fasciitis exercises for foot wellness', 
+            name: 'Plantar Fasciitis Exercises: Reduce Pain & Improve Foot Strength', 
+            description: 'Simple and effective stretches to relieve heel pain, improve flexibility, and support foot health.', 
             color: 'bg-yellow-500', 
             imagePath: '/images/plantar-fasciitis-benefits-2.jpg', 
             resourceTitle: 'plantar-fasciitis-benefits-2.jpg'
         }
     ];
-    
     
     // Function to handle resource download
     const downloadResource = async (resource) => {
@@ -226,11 +261,20 @@ export default function NutritionFitness() {
                                             value={formData.fullName}
                                             onChange={handleChange}
                                             required
-                                            className="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-200"
+                                            className={`w-full px-4 py-3 rounded-lg border 
+                                                ${errors.fullName ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-indigo-500'} 
+                                                focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200`}
                                             placeholder="Enter your full name"
                                         />
+                                        {errors.fullName && (
+                                            <div className="mt-2 flex items-center text-sm text-red-600">
+                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                                                </svg>
+                                                {errors.fullName}
+                                            </div>
+                                        )}
                                     </div>
-                                    
                                     <div className="mb-6">
                                         <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
                                             Email Address

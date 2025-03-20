@@ -35,9 +35,9 @@ const DoctorProfile = () => {
             </h3>
 
             <div className="space-y-4 text-gray-600">
-              <p className="leading-relaxed text-lg">
+              <p className="leading-relaxed text-lg text-justify">
                 Welcome to the practice of Dr. Abhishek Saxena, Senior Consultant 
-                specializing in shoulder, knee, and sports injuries. Dr. Saxena's 
+                specializing in shoulder, knee, and sports injuries. Dr. Abhishek Saxena's 
                 academic journey reflects his commitment to excellence, starting 
                 with an MBBS from the prestigious MS Ramaiah Medical College, 
                 Bangalore, ranked 3rd in Bangalore by India Today in 2024. He 

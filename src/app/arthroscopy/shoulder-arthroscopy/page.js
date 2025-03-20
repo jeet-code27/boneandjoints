@@ -64,7 +64,7 @@ const ShoulderArthroscopy = () => {
               <Calendar className="h-6 w-6 text-blue-600" />
               <div>
                 <p className="text-sm text-gray-600">Experience</p>
-                <p className="font-bold">10 Years</p>
+                <p className="font-bold">10+ Years</p>
               </div>
             </div>
           </div>

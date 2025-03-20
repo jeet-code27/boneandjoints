@@ -10,7 +10,7 @@ const SportsInjuryService = () => {
     {
       title: "Sprains",
       image: "/images/sprains.webp",
-      description: "Sprains are common injuries that occur when ligaments are stretched or torn, often affecting the ankles, wrists, or knees. Dr. Saxena provides effective treatment plans to reduce pain, promote healing, and prevent future injuries.",
+      description: "Sprains are common injuries that occur when ligaments are stretched or torn, often affecting the ankles, wrists, or knees. Dr. Abhishek Saxena provides effective treatment plans to reduce pain, promote healing, and prevent future injuries.",
       features: [
         "Immediate pain relief and swelling reduction",
         "Customized rehabilitation programs",
@@ -22,7 +22,7 @@ const SportsInjuryService = () => {
     {
       title: "Back Injuries",
       image: "/images/back-injuries.webp",
-      description: "Back injuries, such as muscle strains, herniated discs, or spinal fractures, can significantly impact mobility and quality of life. Dr. Saxena offers advanced diagnostic tools and tailored treatment plans to restore function and alleviate pain.",
+      description: "Back injuries, such as muscle strains, herniated discs, or spinal fractures, can significantly impact mobility and quality of life. Dr. Abhishek Saxena offers advanced diagnostic tools and tailored treatment plans to restore function and alleviate pain.",
       features: [
         "Non-surgical and surgical options",
         "Physical therapy and strengthening exercises",
@@ -34,7 +34,7 @@ const SportsInjuryService = () => {
     {
       title: "Knee Injuries",
       image: "/images/knee-injuries.webp",
-      description: "Knee injuries, such as ACL tears, meniscus tears, or patellar dislocations, are common among athletes. Dr. Saxena specializes in advanced treatments to restore knee stability, function, and performance.",
+      description: "Knee injuries, such as ACL tears, meniscus tears, or patellar dislocations, are common among athletes. Dr. Abhishek Saxena specializes in advanced treatments to restore knee stability, function, and performance.",
       features: [
         "Minimally invasive surgical techniques",
         "Customized rehabilitation plans",

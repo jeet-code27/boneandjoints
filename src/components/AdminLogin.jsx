@@ -6,8 +6,11 @@ import {
   collection, 
   getDocs, 
   query, 
-  orderBy
+  orderBy,
+  doc,
+  updateDoc
 } from 'firebase/firestore';
+import emailjs from 'emailjs-com';
 
 const AdminLogin = () => {
   // Authentication state
@@ -37,7 +40,7 @@ const AdminLogin = () => {
   const nutritionTableRef = useRef(null);
   
   // Admin credentials - in a real app, these would not be hardcoded
-  const ADMIN_USERNAME = 'admin';
+  const ADMIN_USERNAME = '';
   const ADMIN_PASSWORD = 'admin12345';
 
   // Format time to 12-hour format with AM/PM
@@ -132,26 +135,26 @@ const AdminLogin = () => {
   // Fetch bookings from Firestore
   const fetchBookings = async () => {
     if (!db) return;
-    
+  
     setIsLoading(true);
-    
+  
     try {
       const bookingsQuery = query(
         collection(db, "bookings"),
-        orderBy("date", "desc"), 
+        orderBy("date", "desc"),
         orderBy("timeSlot", "asc")
       );
-      
+  
       const querySnapshot = await getDocs(bookingsQuery);
       const bookingsData = [];
-      
+  
       querySnapshot.forEach((doc) => {
         bookingsData.push({
-          id: doc.id,
-          ...doc.data()
+          id: doc.id, // Include the document ID
+          ...doc.data(), // Include all fields, including status
         });
       });
-      
+  
       setBookings(bookingsData);
       setFilteredBookings(bookingsData);
     } catch (error) {
@@ -264,6 +267,70 @@ const AdminLogin = () => {
     setPosition(scrollPercentage);
   };
 
+  // Function to handle accepting a consultation
+  const handleAcceptConsultation = async (booking) => {
+    try {
+      // Update the status to "accepted"
+      const bookingRef = doc(db, "bookings", booking.id);
+      await updateDoc(bookingRef, {
+        status: "accepted",
+      });
+  
+      // Send confirmation email
+      const templateParams = {
+        to_name: booking.fullName,
+        to_email: booking.email,
+        date: formatDate(booking.date),
+        time: formatTime(booking.timeSlot),
+        status: "accepted",
+      };
+  
+      await emailjs.send(
+        "service_lp22woo", // Replace with your EmailJS service ID
+        "template_vgltjpj", // Replace with your EmailJS template ID
+        templateParams,
+        "X5eAJHZMhbpWdEfP0" // Replace with your EmailJS user ID
+      );
+  
+      // Refresh the bookings list
+      fetchBookings();
+    } catch (error) {
+      console.error("Error accepting consultation:", error);
+    }
+  };
+  
+  // Function to handle declining a consultation
+  const handleDeclineConsultation = async (booking) => {
+    try {
+      // Update the status to "declined"
+      const bookingRef = doc(db, "bookings", booking.id);
+      await updateDoc(bookingRef, {
+        status: "declined",
+      });
+  
+      // Send confirmation email
+      const templateParams = {
+        to_name: booking.fullName,
+        to_email: booking.email,
+        date: formatDate(booking.date),
+        time: formatTime(booking.timeSlot),
+        status: "declined",
+      };
+  
+      await emailjs.send(
+        "service_lp22woo", // Replace with your EmailJS service ID
+        "template_vgltjpj", // Replace with your EmailJS template ID
+        templateParams,
+        "X5eAJHZMhbpWdEfP0" // Replace with your EmailJS user ID
+      );
+  
+      // Refresh the bookings list
+      fetchBookings();
+    } catch (error) {
+      console.error("Error declining consultation:", error);
+    }
+  };
+
   // Login form
   if (!isAuthenticated) {
     return (
@@ -341,7 +408,6 @@ const AdminLogin = () => {
             onClick={handleLogout}
             className="bg-gradient-to-r from-red-500 to-pink-500 hover:from-red-600 hover:to-pink-600 text-white py-2 px-6 rounded-lg text-sm font-medium shadow-md transition duration-150 ease-in-out flex items-center"
           >
-           
             Logout
           </button>
         </div>
@@ -441,50 +507,67 @@ const AdminLogin = () => {
                 ref={bookingsTableRef}
               >
                 <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50 sticky top-0 z-10">
-                    <tr>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Patient</th>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contact</th>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date & Time</th>
-                     
-                      <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Booked On</th>
-                    </tr>
-                  </thead>
-                  <tbody className="bg-white divide-y divide-gray-200">
-                    {filteredBookings.map((booking) => (
-                      <tr key={booking.id} className="hover:bg-blue-50 transition duration-150">
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm font-medium text-gray-900">{booking.fullName}</div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-900">{booking.phoneNumber}</div>
-                          <div className="text-sm text-gray-500">{booking.email}</div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
-                            booking.consultationType === 'clinic' 
-                              ? 'bg-green-100 text-green-800' 
-                              : 'bg-blue-100 text-blue-800'
-                          }`}>
-                            {booking.consultationType === 'clinic' ? 'Clinic' : 'Hospital'}
-                          </span>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                          <div className="text-sm text-gray-900">{formatDate(booking.date)}</div>
-                          <div className="text-sm text-gray-500">{formatTime(booking.timeSlot)}</div>
-                        </td>
-                        {/* <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {booking.location || (booking.consultationType === 'clinic' 
-                            ? 'Dr Abhishek Saxena, near Jeevan Jyoti Hospital, Lajpat Nagar, Ramganj, Ajmer, Rajasthan 305001' 
-                            : 'Jeevan Jyoti Hospital, 19, 26B, Beawar Rd, Nai Basti, Ramganj, Ajmer')}
-                        </td> */}
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                          {booking.createdAt ? new Date(booking.createdAt).toLocaleString() : 'N/A'}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
+                <thead className="bg-gray-50 sticky top-0 z-10">
+  <tr>
+    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Patient</th>
+    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contact</th>
+    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
+    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date & Time</th>
+    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+    <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+  </tr>
+</thead>
+<tbody className="bg-white divide-y divide-gray-200">
+  {filteredBookings.map((booking) => (
+    <tr key={booking.id} className="hover:bg-blue-50 transition duration-150">
+      <td className="px-6 py-4 whitespace-nowrap">
+        <div className="text-sm font-medium text-gray-900">{booking.fullName}</div>
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap">
+        <div className="text-sm text-gray-900">{booking.phoneNumber}</div>
+        <div className="text-sm text-gray-500">{booking.email}</div>
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap">
+        <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
+          booking.consultationType === 'clinic' 
+            ? 'bg-green-100 text-green-800' 
+            : 'bg-blue-100 text-blue-800'
+        }`}>
+          {booking.consultationType === 'clinic' ? 'Clinic' : 'Hospital'}
+        </span>
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap">
+        <div className="text-sm text-gray-900">{formatDate(booking.date)}</div>
+        <div className="text-sm text-gray-500">{formatTime(booking.timeSlot)}</div>
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap">
+        <span className={`px-3 py-1 inline-flex text-xs leading-5 font-semibold rounded-full ${
+          booking.status === 'accepted' 
+            ? 'bg-green-100 text-green-800' 
+            : booking.status === 'declined' 
+            ? 'bg-red-100 text-red-800' 
+            : 'bg-gray-100 text-gray-800'
+        }`}>
+          {booking.status || 'Pending'}
+        </span>
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+        <button
+          onClick={() => handleAcceptConsultation(booking)}
+          className="bg-green-500 hover:bg-green-600 text-white py-1 px-3 rounded-md text-sm font-medium mr-2"
+        >
+          Accept
+        </button>
+        <button
+          onClick={() => handleDeclineConsultation(booking)}
+          className="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded-md text-sm font-medium"
+        >
+          Decline
+        </button>
+      </td>
+    </tr>
+  ))}
+</tbody>
                 </table>
               </div>
               

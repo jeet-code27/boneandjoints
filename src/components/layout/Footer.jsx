@@ -37,7 +37,7 @@ const Footer = () => {
                 />
               </div>
               <p className="text-gray-700 text-sm leading-relaxed max-w-sm">
-                Dr. Abhishek Saxena, a distinguished orthopedic surgeon, brings over 10 years of experience and 500+ successful surgeries.
+                Dr. Abhishek Saxena, a distinguished orthopedic surgeon, brings over 10+ years of experience and 500+ successful surgeries.
               </p>
               
               {/* Social Icons */}
@@ -129,7 +129,7 @@ const Footer = () => {
           {/* Copyright Bar */}
           <div className="mt-12 pt-6 border-t border-gray-300 text-center text-sm text-gray-600">
             <p>
-              Copyright © 2024 | Powered by{' '}
+              Copyright © {new Date().getFullYear()}  | Powered by{' '}
               <a 
                 href="https://seocialmedia.in" 
                 target="_blank" 

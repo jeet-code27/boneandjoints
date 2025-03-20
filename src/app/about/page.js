@@ -14,7 +14,7 @@ export default function AboutPage() {
           subtitle="Transforming Lives with Advanced Orthopedic Solutions"
           breadcrumbs={[
           { label: 'Home', path: '/' },
-          { label: 'About', path: '/about' }
+          { label: 'About Us', path: '/about' }
          ]}
       />
       <AboutDoctor doctorImage="/images/abhishek.png" />
