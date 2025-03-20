@@ -40,8 +40,8 @@ const AdminLogin = () => {
   const nutritionTableRef = useRef(null);
   
   // Admin credentials - in a real app, these would not be hardcoded
-  const ADMIN_USERNAME = '';
-  const ADMIN_PASSWORD = 'admin12345';
+  const ADMIN_USERNAME = 'boneandjointsadmin';
+  const ADMIN_PASSWORD = 'superadmin@boneandjoints';
 
   // Format time to 12-hour format with AM/PM
   const formatTime = (time24h) => {
