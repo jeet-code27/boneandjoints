@@ -28,7 +28,8 @@ const AdminLogin = () => {
   const [filterDate, setFilterDate] = useState('');
   const [filterType, setFilterType] = useState('all');
   const [filterName, setFilterName] = useState('');
-  
+  const [loadingBookings, setLoadingBookings] = useState({});
+
   // Slider state
   const [bookingsScrollHeight, setBookingsScrollHeight] = useState(0);
   const [nutritionScrollHeight, setNutritionScrollHeight] = useState(0);
@@ -268,68 +269,81 @@ const AdminLogin = () => {
   };
 
   // Function to handle accepting a consultation
-  const handleAcceptConsultation = async (booking) => {
-    try {
-      // Update the status to "accepted"
-      const bookingRef = doc(db, "bookings", booking.id);
-      await updateDoc(bookingRef, {
-        status: "accepted",
-      });
-  
-      // Send confirmation email
-      const templateParams = {
-        to_name: booking.fullName,
-        to_email: booking.email,
-        date: formatDate(booking.date),
-        time: formatTime(booking.timeSlot),
-        status: "accepted",
-      };
-  
-      await emailjs.send(
-        "service_lp22woo", // Replace with your EmailJS service ID
-        "template_vgltjpj", // Replace with your EmailJS template ID
-        templateParams,
-        "X5eAJHZMhbpWdEfP0" // Replace with your EmailJS user ID
-      );
-  
-      // Refresh the bookings list
-      fetchBookings();
-    } catch (error) {
-      console.error("Error accepting consultation:", error);
-    }
-  };
-  
-  // Function to handle declining a consultation
-  const handleDeclineConsultation = async (booking) => {
-    try {
-      // Update the status to "declined"
-      const bookingRef = doc(db, "bookings", booking.id);
-      await updateDoc(bookingRef, {
-        status: "declined",
-      });
-  
-      // Send confirmation email
-      const templateParams = {
-        to_name: booking.fullName,
-        to_email: booking.email,
-        date: formatDate(booking.date),
-        time: formatTime(booking.timeSlot),
-        status: "declined",
-      };
-  
-      await emailjs.send(
-        "service_lp22woo", // Replace with your EmailJS service ID
-        "template_vgltjpj", // Replace with your EmailJS template ID
-        templateParams,
-        "X5eAJHZMhbpWdEfP0" // Replace with your EmailJS user ID
-      );
-  
-      // Refresh the bookings list
-      fetchBookings();
-    } catch (error) {
-      console.error("Error declining consultation:", error);
-    }
-  };
+
+const handleAcceptConsultation = async (booking) => {
+  try {
+    // Set loading state for this booking
+    setLoadingBookings(prev => ({ ...prev, [booking.id]: true }));
+
+    // Update the status to "accepted"
+    const bookingRef = doc(db, "bookings", booking.id);
+    await updateDoc(bookingRef, {
+      status: "accepted",
+    });
+
+    // Send confirmation email
+    const templateParams = {
+      to_name: booking.fullName,
+      to_email: booking.email,
+      date: formatDate(booking.date),
+      time: formatTime(booking.timeSlot),
+      status: "accepted",
+    };
+
+    await emailjs.send(
+      "service_lp22woo", // Replace with your EmailJS service ID
+      "template_vgltjpj", // Replace with your EmailJS template ID
+      templateParams,
+      "X5eAJHZMhbpWdEfP0" // Replace with your EmailJS user ID
+    );
+
+    // Refresh the bookings list
+    fetchBookings();
+  } catch (error) {
+    console.error("Error accepting consultation:", error);
+  } finally {
+    // Reset loading state for this booking
+    setLoadingBookings(prev => ({ ...prev, [booking.id]: false }));
+  }
+};
+
+// Function to handle declining a consultation
+const handleDeclineConsultation = async (booking) => {
+  try {
+    // Set loading state for this booking
+    setLoadingBookings(prev => ({ ...prev, [booking.id]: true }));
+
+    // Update the status to "declined"
+    const bookingRef = doc(db, "bookings", booking.id);
+    await updateDoc(bookingRef, {
+      status: "declined",
+    });
+
+    // Send confirmation email
+    const templateParams = {
+      to_name: booking.fullName,
+      to_email: booking.email,
+      date: formatDate(booking.date),
+      time: formatTime(booking.timeSlot),
+      status: "declined",
+    };
+
+    await emailjs.send(
+      "service_lp22woo", // Replace with your EmailJS service ID
+      "template_vgltjpj", // Replace with your EmailJS template ID
+      templateParams,
+      "X5eAJHZMhbpWdEfP0" // Replace with your EmailJS user ID
+    );
+
+    // Refresh the bookings list
+    fetchBookings();
+  } catch (error) {
+    console.error("Error declining consultation:", error);
+  } finally {
+    // Reset loading state for this booking
+    setLoadingBookings(prev => ({ ...prev, [booking.id]: false }));
+  }
+};
 
   // Login form
   if (!isAuthenticated) {
@@ -552,19 +566,27 @@ const AdminLogin = () => {
         </span>
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-        <button
-          onClick={() => handleAcceptConsultation(booking)}
-          className="bg-green-500 hover:bg-green-600 text-white py-1 px-3 rounded-md text-sm font-medium mr-2"
-        >
-          Accept
-        </button>
-        <button
-          onClick={() => handleDeclineConsultation(booking)}
-          className="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded-md text-sm font-medium"
-        >
-          Decline
-        </button>
-      </td>
+  {loadingBookings[booking.id] ? (
+    <div className="inline-block animate-spin rounded-full h-5 w-5 border-b-2 border-blue-500"></div>
+  ) : (
+    <>
+      <button
+        onClick={() => handleAcceptConsultation(booking)}
+        disabled={loadingBookings[booking.id]}
+        className="bg-green-500 hover:bg-green-600 text-white py-1 px-3 rounded-md text-sm font-medium mr-2 disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        Accept
+      </button>
+      <button
+        onClick={() => handleDeclineConsultation(booking)}
+        disabled={loadingBookings[booking.id]}
+        className="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded-md text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+      >
+        Decline
+      </button>
+    </>
+  )}
+</td>
     </tr>
   ))}
 </tbody>
