@@ -120,7 +120,7 @@ const AllCondition = () => {
 
   return (
     <div className="max-w-6xl mx-auto p-6 bg-gray-50">
-      <h1 className="text-4xl font-bold text-center mb-8 bg-gradient-to-r from-blue-900 to-cyan-500 text-transparent bg-clip-text">Pains We Treat</h1>
+      <h2 className="text-4xl font-bold text-center mb-8 bg-gradient-to-r from-blue-900 to-cyan-500 text-transparent bg-clip-text">Pains We Treat</h2>
       
       <div className="text-center mb-6">
         <p className="text-gray-600">Some of our common areas of expertise have been listed below</p>

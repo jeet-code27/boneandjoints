@@ -49,14 +49,14 @@ const SportsInjuryService = () => {
     <section className="py-12 md:py-20 px-4 md:px-16 bg-gray-50">
       {/* Header Section */}
       <div className="max-w-7xl mx-auto text-center">
-        <motion.h2 
+        <motion.h1 
           initial={{ opacity: 0, y: -20 }} 
           animate={{ opacity: 1, y: 0 }} 
           transition={{ duration: 0.5 }}
           className="text-3xl md:text-5xl font-bold text-blue-900 mb-6 md:mb-8"
         >
           Comprehensive Sports Injury Solutions
-        </motion.h2>
+        </motion.h1>
         <motion.p 
           initial={{ opacity: 0, y: 20 }} 
           animate={{ opacity: 1, y: 0 }} 

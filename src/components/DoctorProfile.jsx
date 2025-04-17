@@ -24,12 +24,12 @@ const DoctorProfile = () => {
 
           {/* Content Section */}
           <div className="lg:w-3/5 space-y-6 sm:mt-20">
-            <h1 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-[#1E0B9B] to-[#07CCEC] inline-block text-transparent bg-clip-text">
+            <h2 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-[#1E0B9B] to-[#07CCEC] inline-block text-transparent bg-clip-text">
               Dr. Abhishek Saxena
-            </h1>
-            <h2 className="text-3xl md:text-4xl font-semibold text-gray-700">
-              Orthopedic Surgeon In Ajmer
             </h2>
+            <h1 className="text-3xl md:text-4xl font-semibold text-gray-700">
+              Orthopedic Surgeon In Ajmer
+            </h1>
             <h3 className="text-2xl text-gray-600 font-medium">
               Senior Consultant - Shoulder, Knee & Sport Injuries
             </h3>

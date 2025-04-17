@@ -6,6 +6,8 @@ import Image from 'next/image';
 import { collection, addDoc } from 'firebase/firestore';
 import { db } from '@/firebase/firebaseConfig'; // Import Firebase config
 
+
+
 export default function NutritionFitness() {
     const [formData, setFormData] = useState({
         fullName: '',

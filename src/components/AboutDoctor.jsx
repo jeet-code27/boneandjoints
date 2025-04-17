@@ -9,12 +9,12 @@ const AboutDoctor = ({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-start">
           {/* Content Column - Now on Left */}
           <div className="lg:col-span-8 order-2 lg:order-1">
-            <h1 className="text-4xl font-bold mb-2 bg-gradient-to-r from-blue-900 to-cyan-400 text-transparent bg-clip-text">
+            <h2 className="text-4xl font-bold mb-2 bg-gradient-to-r from-blue-900 to-cyan-400 text-transparent bg-clip-text">
               Dr. Abhishek Saxena
-            </h1>
-            <h2 className="text-2xl font-semibold mb-6 bg-gradient-to-r from-blue-900 to-cyan-400 text-transparent bg-clip-text">
-              Senior Consultant - Shoulder, Knee & Sport Injuries
             </h2>
+            <h1 className="text-2xl font-semibold mb-6 bg-gradient-to-r from-blue-900 to-cyan-400 text-transparent bg-clip-text">
+              Senior Consultant - Shoulder, Knee & Sport Injuries
+            </h1>
 
             <div className="space-y-6 text-gray-700 leading-relaxed">
               <p>
