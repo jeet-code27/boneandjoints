@@ -2,7 +2,7 @@ import AboutHero from "@/components/AboutHero";
 import ReplacementService from "@/components/ReplacmentService";
 
 export const metadata = {
-  title: 'Joint Replacement Services | Hip & Knee Replacement in Ajmer | Dr. Abhishek Saxena',
+  title: 'Hip & Knee Replacement in Ajmer | Dr. Abhishek Saxena',
   description: 'Advanced hip and knee replacement surgery in Ajmer by Dr. Abhishek Saxena. Get expert orthopedic care for joint replacements with minimally invasive techniques and faster recovery.',
   keywords: 'hip replacement Ajmer, knee replacement surgery, joint replacement specialist, orthopedic surgeon Ajmer, total knee replacement, partial knee replacement, hip resurfacing, revision joint replacement, Dr. Abhishek Saxena',
   openGraph: {

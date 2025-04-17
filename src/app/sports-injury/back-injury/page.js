@@ -1,10 +1,65 @@
-'use client';
+
 
 import React from 'react';
 import { Star, Calendar, Award, Phone } from 'lucide-react';
 import Image from 'next/image';
 import AboutHero from '@/components/AboutHero';
 import Link from 'next/link';
+
+export const metadata = {
+  title: 'Best Back Injury Treatment in Ajmer | Dr. Abhishek Saxena',
+  description: 'Expert back injury treatment & spine care in Ajmer by Dr. Abhishek Saxena. Specialized in sports injuries, slipped discs, sciatica & spinal rehabilitation for pain relief & recovery.',
+  keywords: [
+    'back pain treatment Ajmer',
+    'sports injury specialist Ajmer',
+    'spine doctor near me',
+    'slipped disc treatment',
+    'sciatica pain relief',
+    'spinal rehabilitation',
+    'back injury specialist',
+    'best orthopedic surgeon for back pain',
+    'Dr. Abhishek Saxena Ajmer',
+    'non-surgical back treatment',
+    'chronic back pain solutions'
+  ].join(', '),
+  openGraph: {
+    title: 'Back Injury Specialist in Ajmer | Dr. Abhishek Saxena',
+    description: 'Comprehensive back injury treatment including sports injuries, spinal disorders, and rehabilitation programs. Get personalized care for acute and chronic back conditions.',
+    images: [
+      {
+        url: '/images/back-injuries.webp',
+        width: 1200,  // Increased for better social media display
+        height: 630,  // Ideal aspect ratio for social sharing
+        alt: 'Dr. Abhishek Saxena - Back Injury Treatment Specialist in Ajmer',
+      },
+    ],
+    type: 'website',
+    url: 'https://boneandjoints.in/sports-injury/back-injury',
+    siteName: 'Dr Abhishek Saxena - Ajmer',  // Added for better branding
+  },
+  alternates: {
+    canonical: 'https://boneandjoints.in/sports-injury/back-injury',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    nocache: false,  // Explicitly stated for clarity
+    googleBot: {    // Added specific Google bot instructions
+      index: true,
+      follow: true,
+      noimageindex: false,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    }
+  },
+  twitter: {  // Added Twitter card metadata
+    card: 'summary_large_image',
+    title: 'Back Injury Treatment Specialist in Ajmer | Dr. Abhishek Saxena',
+    description: 'Expert care for back injuries, spinal conditions, and sports-related back problems. Advanced treatment options for pain relief and recovery.',
+    images: ['/images/back-injuries.webp']
+  }
+};
 
 const BackInjury = () => {
   return (

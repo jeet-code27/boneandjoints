@@ -1,10 +1,37 @@
-'use client';
+
 
 import React from 'react';
 import { Star, Calendar, Award, Phone } from 'lucide-react';
 import Image from 'next/image';
 import AboutHero from '@/components/AboutHero';
 import Link from 'next/link';
+
+export const metadata = {
+  title: 'Shoulder Replacement Surgeon in Ajmer | Dr. Abhishek Saxena',
+  description: 'Advanced Shoulder replacement surgery in Ajmer by Dr. Abhishek Saxena. Get expert orthopedic care for joint replacements with minimally invasive techniques and faster recovery.',
+  keywords: 'hip replacement Ajmer, Shoulder replacement surgery, joint replacement specialist, orthopedic surgeon Ajmer, total Shoulder replacement, partial Shoulder replacement, hip resurfacing, revision joint replacement, Dr. Abhishek Saxena',
+  openGraph: {
+    title: 'Shoulder Replacement Surgeon in Ajmer | Dr. Abhishek Saxena',
+    description: 'Specialized joint replacement services including total Shoulder replacement, partial Shoulder replacement, and hip replacement surgery by top orthopedic surgeon in Ajmer.',
+    images: [
+      {
+        url: '/images/shoulder-replacement.webp', 
+        width: 800,
+        height: 600,
+        alt: 'Joint Replacement Services in Ajmer',
+      },
+    ],
+    type: 'website',
+    url: 'https://boneandjoints.in/replacement/shoulder-replacement',
+  },
+  alternates: {
+    canonical: 'https://boneandjoints.in/replacement/shoulder-replacement',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
 
 const ShoulderReplacement = () => {
   return (

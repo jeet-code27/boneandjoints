@@ -2,7 +2,7 @@ import AboutHero from "@/components/AboutHero";
 import ArthroscopyService from "@/components/ArthroscopyService";
 
 export const metadata = {
-  title: 'Arthroscopy Surgery in Ajmer | Knee & Shoulder Arthroscopy Specialist | Dr. Abhishek Saxena',
+  title: 'Knee & Shoulder Arthroscopy Specialist in Ajmer | Dr. Abhishek Saxena',
   description: 'Expert arthroscopic surgery in Ajmer by Dr. Abhishek Saxena. Minimally invasive procedures for knee, shoulder, hip and joint problems with faster recovery and precision.',
   keywords: 'arthroscopy specialist Ajmer, knee arthroscopy, shoulder arthroscopy, minimally invasive surgery, sports injury treatment, ligament repair, meniscus surgery, rotator cuff repair, joint pain treatment, Dr. Abhishek Saxena',
   openGraph: {

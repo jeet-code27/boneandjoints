@@ -1,10 +1,38 @@
-'use client';
+
 
 import React from 'react';
 import { Star, Calendar, Award, Phone } from 'lucide-react';
 import AboutHero from '@/components/AboutHero';
 import Image from 'next/image';
 import Link from 'next/link';
+
+export const metadata = {
+  title: 'Hip Replacement Surgeon in Ajmer | Dr. Abhishek Saxena',
+  description: 'Advanced hip replacement surgery in Ajmer by Dr. Abhishek Saxena. Get expert orthopedic care for joint replacements with minimally invasive techniques and faster recovery.',
+  keywords: 'hip replacement Ajmer, knee replacement surgery, joint replacement specialist, orthopedic surgeon Ajmer, total knee replacement, partial knee replacement, hip resurfacing, revision joint replacement, Dr. Abhishek Saxena',
+  openGraph: {
+    title: 'Hip Replacement Surgeon in Ajmer | Dr. Abhishek Saxena',
+    description: 'Specialized joint replacement services including total knee replacement, partial knee replacement, and hip replacement surgery by top orthopedic surgeon in Ajmer.',
+    images: [
+      {
+        url: '/images/kneereplacement.webp', 
+        width: 800,
+        height: 600,
+        alt: 'Joint Replacement Services in Ajmer',
+      },
+    ],
+    type: 'website',
+    url: 'https://boneandjoints.in/replacement/hip-replacement',
+  },
+  alternates: {
+    canonical: 'https://boneandjoints.in/replacement/hip-replacement',
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+};
+
 
 const HipReplacement = () => {
   return (

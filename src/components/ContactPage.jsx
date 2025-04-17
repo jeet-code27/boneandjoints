@@ -12,7 +12,7 @@ const ContactPage = () => {
         <div className="bg-white rounded-xl shadow-xl overflow-hidden mb-12">
           <div className="md:flex">
             <div className="md:w-1/2 p-8">
-              <h2 className="text-3xl font-bold mb-4 bg-gradient-to-r from-blue-900 to-cyan-400 text-transparent bg-clip-text">Expert Orthopedic Care</h2>
+              <h1 className="text-3xl font-bold mb-4 bg-gradient-to-r from-blue-900 to-cyan-400 text-transparent bg-clip-text">Expert Orthopedic Care</h1>
               <p className="text-xl text-black mb-6">Specialized treatment for all bone and joint conditions with personalized care.</p>
               <div className="flex items-center space-x-2 mb-4">
                 <div className="bg-gradient-to-r from-blue-900 to-cyan-400 p-2 rounded-full">

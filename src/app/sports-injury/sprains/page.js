@@ -1,10 +1,65 @@
-'use client';
 
 import React from 'react';
 import { Star, Calendar, Award, Phone } from 'lucide-react';
 import Image from 'next/image';
 import AboutHero from '@/components/AboutHero';
 import Link from 'next/link';
+
+export const metadata = {
+  title: 'Best Sprain Injury Treatment in Ajmer | Dr. Abhishek Saxena',
+  description: 'Expert sprain treatment for ankles, wrists, knees & more in Ajmer. Specialized care for ligament injuries with advanced rehabilitation by top orthopedic surgeon Dr. Abhishek Saxena.',
+  keywords: [
+    'sprain treatment Ajmer',
+    'ankle sprain specialist',
+    'wrist sprain doctor',
+    'ligament injury treatment',
+    'sports injury recovery',
+    'sprain rehabilitation',
+    'RICE protocol expert',
+    'best orthopedic for sprains',
+    'sports medicine specialist Ajmer',
+    'joint sprain treatment',
+    'Dr. Abhishek Saxena sprain specialist',
+    'acute sprain care'
+  ].join(', '),
+  openGraph: {
+    title: 'Sprain Injury Specialist in Ajmer | Dr. Abhishek Saxena',
+    description: 'Comprehensive sprain treatment including advanced rehabilitation programs for ankle, wrist, knee and other joint sprains. Get back to activity with proper care.',
+    images: [
+      {
+        url: '/images/sprains.webp',
+        width: 1200,
+        height: 630,
+        alt: 'Dr. Abhishek Saxena - Sprain Injury Specialist in Ajmer',
+      },
+    ],
+    type: 'website',
+    url: 'https://www.boneandjoints.in/sports-injury/sprain',
+    siteName: 'Dr. Abhishek Saxena Orthopedic Clinic',
+  },
+  alternates: {
+    canonical: 'https://www.boneandjoints.in/sports-injury/sprain',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    nocache: false,
+    googleBot: {
+      index: true,
+      follow: true,
+      noimageindex: false,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    }
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Sprain Injury Specialist in Ajmer | Dr. Abhishek Saxena',
+    description: 'Expert care for ankle, wrist, knee and other sprains. Advanced treatment options for athletes and active individuals.',
+    images: ['/images/sprains.webp']
+  }
+};
 
 const SprainInjury = () => {
   return (

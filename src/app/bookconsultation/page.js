@@ -28,7 +28,7 @@ export const metadata = {
         alt: 'Book Appointment with Dr. Abhishek Saxena',
       },
     ],
-    siteName: 'Bone & Joints Clinic',
+    siteName: 'Dr Abhishek Saxena'
   },
   alternates: {
     canonical: 'https://boneandjoints.in/bookconsultation',

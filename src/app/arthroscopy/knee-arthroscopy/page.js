@@ -1,10 +1,64 @@
-'use client';
 
-import React from 'react';
 import { Star, Calendar, Award, Phone } from 'lucide-react';
 import Image from 'next/image';
 import AboutHero from '@/components/AboutHero';
 import Link from 'next/link';
+
+export const metadata = {
+  title: 'Best Knee Arthroscopy Surgery in Ajmer | Dr. Abhishek Saxena',
+  description: 'Expert knee arthroscopy procedures for ACL tears, meniscus injuries & cartilage damage in Ajmer. Minimally invasive surgery with faster recovery by top orthopedic surgeon Dr. Abhishek Saxena.',
+  keywords: [
+    'knee arthroscopy Ajmer',
+    'ACL surgery specialist',
+    'meniscus repair surgery',
+    'minimally invasive knee surgery',
+    'arthroscopic knee specialist',
+    'knee cartilage treatment',
+    'sports knee injury surgery',
+    'best knee surgeon in Ajmer',
+    'day care knee surgery',
+    'quick recovery knee procedure',
+    'Dr. Abhishek Saxena arthroscopy expert',
+    'keyhole knee surgery'
+  ].join(', '),
+  openGraph: {
+    title: 'Knee Arthroscopy Specialist in Ajmer | Dr. Abhishek Saxena',
+    description: 'Advanced minimally invasive knee surgery for sports injuries, cartilage damage and ligament repairs. Faster recovery with precision arthroscopic techniques.',
+    images: [
+      {
+        url: '/images/knee-arthroscopy.webp',
+        width: 1200,
+        height: 630,
+        alt: 'Dr. Abhishek Saxena Performing Knee Arthroscopy in Ajmer',
+      },
+    ],
+    type: 'website',
+    url: 'https://www.boneandjoints.in/arthroscopy/knee-arthroscopy',
+    siteName: 'Dr. Abhishek Saxena Orthopedic Center',
+  },
+  alternates: {
+    canonical: 'https://www.boneandjoints.in/arthroscopy/knee-arthroscopy',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    nocache: false,
+    googleBot: {
+      index: true,
+      follow: true,
+      noimageindex: false,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    }
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Knee Arthroscopy Expert in Ajmer | Dr. Abhishek Saxena',
+    description: 'Specialized in minimally invasive knee procedures for ACL, meniscus and cartilage injuries. Advanced techniques for faster recovery.',
+    images: ['/images/knee-arthroscopy.webp']
+  }
+};
 
 const KneeArthroscopy = () => {
   return (

@@ -8,7 +8,8 @@ import {
   query, 
   orderBy,
   doc,
-  updateDoc
+  updateDoc,
+  deleteDoc
 } from 'firebase/firestore';
 import emailjs from 'emailjs-com';
 
@@ -29,7 +30,8 @@ const AdminLogin = () => {
   const [filterType, setFilterType] = useState('all');
   const [filterName, setFilterName] = useState('');
   const [loadingBookings, setLoadingBookings] = useState({});
-
+  const [deleteConfirmation, setDeleteConfirmation] = useState(null);
+  
   // Slider state
   const [bookingsScrollHeight, setBookingsScrollHeight] = useState(0);
   const [nutritionScrollHeight, setNutritionScrollHeight] = useState(0);
@@ -345,6 +347,90 @@ const handleDeclineConsultation = async (booking) => {
   }
 };
 
+const handleDeleteConsultation = async (bookingId) => {
+  try {
+    // Set loading state for this booking
+    setLoadingBookings(prev => ({ ...prev, [bookingId]: 'deleting' }));
+    
+    // Delete the document from Firestore
+    await deleteDoc(doc(db, "bookings", bookingId));
+    
+    // Refresh the bookings list
+    fetchBookings();
+  } catch (error) {
+    console.error("Error deleting consultation:", error);
+  } finally {
+    // Reset loading and confirmation states
+    setLoadingBookings(prev => ({ ...prev, [bookingId]: false }));
+    setDeleteConfirmation(null);
+  }
+};
+
+const DeleteConfirmationModal = ({ booking, onConfirm, onCancel }) => {
+  return (
+    <div className="fixed inset-0 bg-black/70  bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-xl shadow-xl max-w-md w-full p-6 transform transition-all">
+        <div className="flex justify-between items-start mb-4">
+          <h3 className="text-xl font-bold text-red-600 flex items-center">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            Confirm Deletion
+          </h3>
+          <button onClick={onCancel} className="text-gray-400 hover:text-gray-600">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        
+        <div className="mb-6">
+          <p className="text-gray-700 mb-2">Are you sure you want to delete this appointment?</p>
+          <div className="bg-red-50 border-l-4 border-red-400 p-4">
+            <div className="flex">
+              <div className="flex-shrink-0">
+                <svg className="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+                </svg>
+              </div>
+              <div className="ml-3">
+                <h4 className="text-sm font-medium text-red-800">Patient: {booking.fullName}</h4>
+                <div className="mt-1 text-sm text-red-700">
+                  <p>{formatDate(booking.date)} at {formatTime(booking.timeSlot)}</p>
+                  <p>This action cannot be undone.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div className="flex justify-end space-x-3">
+          <button
+            onClick={onCancel}
+            className="px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+          >
+            Cancel
+          </button>
+          <button
+            onClick={() => onConfirm(booking.id)}
+            className="px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+          >
+            {loadingBookings[booking.id] === 'deleting' ? (
+              <>
+                <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Deleting...
+              </>
+            ) : 'Delete Permanently'}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
   // Login form
   if (!isAuthenticated) {
     return (
@@ -566,27 +652,37 @@ const handleDeclineConsultation = async (booking) => {
         </span>
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-  {loadingBookings[booking.id] ? (
-    <div className="inline-block animate-spin rounded-full h-5 w-5 border-b-2 border-blue-500"></div>
-  ) : (
-    <>
-      <button
-        onClick={() => handleAcceptConsultation(booking)}
-        disabled={loadingBookings[booking.id]}
-        className="bg-green-500 hover:bg-green-600 text-white py-1 px-3 rounded-md text-sm font-medium mr-2 disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        Accept
-      </button>
-      <button
-        onClick={() => handleDeclineConsultation(booking)}
-        disabled={loadingBookings[booking.id]}
-        className="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded-md text-sm font-medium disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        Decline
-      </button>
-    </>
-  )}
-</td>
+        <div className="flex items-center space-x-2">
+          <button
+            onClick={() => handleAcceptConsultation(booking)}
+            disabled={loadingBookings[booking.id]}
+            className={`${loadingBookings[booking.id] === 'accepting' ? 'opacity-50 cursor-not-allowed' : ''} bg-green-500 hover:bg-green-600 text-white py-1 px-3 rounded-md text-sm font-medium`}
+          >
+            {loadingBookings[booking.id] === 'accepting' ? (
+              <div className="inline-block animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+            ) : 'Accept'}
+          </button>
+          <button
+            onClick={() => handleDeclineConsultation(booking)}
+            disabled={loadingBookings[booking.id]}
+            className={`${loadingBookings[booking.id] === 'declining' ? 'opacity-50 cursor-not-allowed' : ''} bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded-md text-sm font-medium`}
+          >
+            {loadingBookings[booking.id] === 'declining' ? (
+              <div className="inline-block animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>
+            ) : 'Decline'}
+          </button>
+          <button
+            onClick={() => setDeleteConfirmation(booking)}
+            disabled={loadingBookings[booking.id]}
+            className="text-gray-500 hover:text-red-600 p-1 transition-colors duration-200"
+            title="Delete Appointment"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+              <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
+            </svg>
+          </button>
+        </div>
+      </td>
     </tr>
   ))}
 </tbody>
@@ -639,6 +735,13 @@ const handleDeclineConsultation = async (booking) => {
           )}
         </div>
       </div>
+      {deleteConfirmation && (
+        <DeleteConfirmationModal
+          booking={deleteConfirmation}
+          onConfirm={handleDeleteConsultation}
+          onCancel={() => setDeleteConfirmation(null)}
+        />
+      )}
     </div>
   );
 };

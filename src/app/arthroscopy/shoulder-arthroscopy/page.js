@@ -1,10 +1,65 @@
-'use client';
+
 
 import React from 'react';
 import { Star, Calendar, Award, Phone } from 'lucide-react';
 import Image from 'next/image';
 import AboutHero from '@/components/AboutHero';
 import Link from 'next/link';
+
+export const metadata = {
+  title: 'Best Shoulder Arthroscopy in Ajmer | Dr. Abhishek Saxena',
+  description: 'Expert shoulder arthroscopy for rotator cuff tears, labral tears & shoulder instability in Ajmer. Advanced keyhole surgery techniques by top orthopedic surgeon Dr. Abhishek Saxena.',
+  keywords: [
+    'shoulder arthroscopy Ajmer',
+    'rotator cuff surgery specialist',
+    'labral tear treatment',
+    'minimally invasive shoulder surgery',
+    'shoulder impingement surgery',
+    'SLAP lesion repair',
+    'frozen shoulder treatment',
+    'best shoulder surgeon in Ajmer',
+    'day care shoulder surgery',
+    'quick recovery shoulder procedure',
+    'Dr. Abhishek Saxena shoulder specialist',
+    'shoulder dislocation treatment'
+  ].join(', '),
+  openGraph: {
+    title: 'Shoulder Arthroscopy Specialist in Ajmer | Dr. Abhishek Saxena',
+    description: 'Advanced minimally invasive shoulder surgery for rotator cuff tears, labral injuries and shoulder instability. Faster recovery with precision arthroscopic techniques.',
+    images: [
+      {
+        url: '/images/shoulder-arthroscopy.webp',
+        width: 1200,
+        height: 630,
+        alt: 'Dr. Abhishek Saxena Performing Shoulder Arthroscopy',
+      },
+    ],
+    type: 'website',
+    url: 'https://boneandjoints.in/arthroscopy/shoulder-arthroscopy',
+  },
+  alternates: {
+    canonical: 'https://boneandjoints.in/arthroscopy/shoulder-arthroscopy',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    nocache: false,
+    googleBot: {
+      index: true,
+      follow: true,
+      noimageindex: false,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    }
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Shoulder Arthroscopy Expert in Ajmer | Dr. Abhishek Saxena',
+    description: 'Specialized in minimally invasive shoulder procedures for rotator cuff, labral tears and instability. Advanced techniques for faster recovery.',
+    images: ['/images/shoulder-arthroscopy.webp']
+  }
+};
 
 const ShoulderArthroscopy = () => {
   return (

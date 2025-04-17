@@ -1,10 +1,66 @@
-'use client';
+
 
 import React from 'react';
 import { Star, Calendar, Award, Phone } from 'lucide-react';
 import AboutHero from '@/components/AboutHero';
 import Image from 'next/image';
 import Link from 'next/link';
+
+export const metadata = {
+  title: 'Best Knee Injury Treatment in Ajmer | Dr. Abhishek Saxena',
+  description: 'Expert knee injury treatment for athletes & active individuals in Ajmer. Specialized care for ACL tears, meniscus injuries, patellar tendinitis & sports-related knee pain by top orthopedic surgeon Dr. Abhishek Saxena.',
+  keywords: [
+    'knee injury treatment Ajmer',
+    'ACL tear specialist',
+    'sports injury doctor',
+    'meniscus tear surgery',
+    'patellar tendinitis treatment',
+    'knee pain relief',
+    'arthroscopic knee surgery',
+    'best orthopedic surgeon for knee',
+    'sports medicine specialist Ajmer',
+    'knee rehabilitation',
+    'PRP therapy for knees',
+    'Dr. Abhishek Saxena knee specialist'
+  ].join(', '),
+  openGraph: {
+    title: 'Knee Injury & Sports Medicine Specialist in Ajmer | Dr. Abhishek Saxena',
+    description: 'Comprehensive knee injury treatment including ACL reconstruction, meniscus repair, and sports rehabilitation programs. Get back to your sport with advanced orthopedic care.',
+    images: [
+      {
+        url: '/images/knee-injuries.webp',
+        width: 1200,
+        height: 630,
+        alt: 'Dr. Abhishek Saxena - Knee Injury Treatment Specialist in Ajmer',
+      },
+    ],
+    type: 'website',
+    url: 'https://boneandjoints.in/sports-injury/knee-injury',
+    siteName: 'Dr . Abhishek Saxena'
+  },
+  alternates: {
+    canonical: 'https://boneandjoints.in/sports-injury/knee-injury',
+  },
+  robots: {
+    index: true,
+    follow: true,
+    nocache: false,
+    googleBot: {
+      index: true,
+      follow: true,
+      noimageindex: false,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    }
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Knee Injury Treatment Specialist in Ajmer | Dr. Abhishek Saxena',
+    description: 'Expert care for ACL tears, meniscus injuries, and sports-related knee problems. Advanced treatment options for athletes and active individuals.',
+    images: ['/images/knee-injuries.webp']
+  }
+};
 
 const KneeInjury = () => {
   return (
