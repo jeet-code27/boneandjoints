@@ -28,7 +28,7 @@ export async function generateMetadata({ params }) {
   }
   
   return {
-    title: `${blog.title} | Dr. Abhishek Saxena`,
+    title: `${blog.title}`,
     description: blog.metaDescription || blog.excerpt || blog.content.substring(0, 160),
     openGraph: {
       title: blog.title,
@@ -141,11 +141,11 @@ export default async function SingleBlogPage({ params }) {
           alt={blog.alt || blog.title}
           fill
           priority
-          className="object-cover rounded-lg"
+          className="object-fit rounded-lg"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-black to-transparent opacity-70 rounded-lg"></div>
         <div className="absolute bottom-0 left-0 right-0 p-6 md:p-12">
-          <h1 className="text-3xl md:text-5xl font-bold text-white mb-2">{blog.title}</h1>
+          <h1 className="text-3xl md:text-5xl font-bold text-white mb-2">{blog.heading}</h1>
         </div>
       </div>
       

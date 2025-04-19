@@ -155,7 +155,7 @@ export default function BlogPage() {
                   </div>
                   <h2 className="text-2xl font-bold text-gray-900 mb-3 hover:text-blue-700" itemProp="headline">
                     <Link href={`/blog/${blog.slug}`} itemProp="url">
-                      {blog.title}
+                      {blog.heading}
                     </Link>
                   </h2>
                   <p className="text-gray-700 mb-4" itemProp="description">
