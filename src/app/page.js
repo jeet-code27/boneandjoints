@@ -6,6 +6,7 @@ import ElfsightWidget from '@/components/ElfsightWidget';
 import ExpertiseSection from '@/components/ExpertiseSection';
 import ImageGallerySlider from '@/components/ImageGallerySlider';
 import ImageSlider from '@/components/ImageSlider';
+import InstagramEmbed from '@/components/InstagramFeedWidget';
 import StatsComponent from '@/components/StatsComponent';
 import WhyChooseUs from '@/components/WhyChooseUs';
 
@@ -63,6 +64,7 @@ export default function Home() {
       <AllCondition/>
       <ElfsightWidget/>
       <AppointmentSection/>
+      <InstagramEmbed/>
     </>
   );
 }
