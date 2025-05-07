@@ -135,7 +135,7 @@ export default async function SingleBlogPage({ params }) {
   return (
     <article className="min-h-screen bg-gray-50">
       {/* Hero section with image */}
-      <div className="relative w-full h-80 md:h-96 max-w-6xl mx-auto mt-6">
+      <div className="relative w-full h-80 md:h-96 max-w-6xl mx-auto">
         <Image 
           src={blog.image || '/images/placeholder.jpg'} 
           alt={blog.alt || blog.title}

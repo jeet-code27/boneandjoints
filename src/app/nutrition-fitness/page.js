@@ -2,11 +2,8 @@
 import AboutHero from "@/components/AboutHero";
 import { useState, useEffect } from 'react';
 import Head from 'next/head';
-import Image from 'next/image';
 import { collection, addDoc } from 'firebase/firestore';
-import { db } from '@/firebase/firebaseConfig'; // Import Firebase config
-
-
+import { db } from '@/firebase/firebaseConfig';
 
 export default function NutritionFitness() {
     const [formData, setFormData] = useState({
@@ -22,12 +19,10 @@ export default function NutritionFitness() {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
 
-    // Validate phone number format (exactly 10 digits)
     const validatePhoneNumber = (phone) => {
         return /^\d{10}$/.test(phone);
     };
 
-    // Validate name format (only alphabets and spaces)
     const validateName = (name) => {
         return /^[A-Za-z\s]+$/.test(name);
     };
@@ -59,7 +54,6 @@ export default function NutritionFitness() {
         }
     };
     
-    // Live validation for phone number
     useEffect(() => {
         if (formData.phoneNumber && formData.phoneNumber.length > 0) {
             if (formData.phoneNumber.length < 10) {
@@ -78,7 +72,6 @@ export default function NutritionFitness() {
         }
     }, [formData.phoneNumber]);
 
-    // Live validation for full name
     useEffect(() => {
         if (formData.fullName && formData.fullName.length > 0) {
             if (!validateName(formData.fullName)) {
@@ -95,7 +88,6 @@ export default function NutritionFitness() {
     const handleSubmit = async (e) => {
         e.preventDefault();
         
-        // Validate full name before submission
         if (!validateName(formData.fullName)) {
             setErrors(prev => ({
                 ...prev, 
@@ -104,7 +96,6 @@ export default function NutritionFitness() {
             return;
         }
         
-        // Validate phone number before submission
         if (!validatePhoneNumber(formData.phoneNumber)) {
             setErrors(prev => ({
                 ...prev, 
@@ -117,16 +108,12 @@ export default function NutritionFitness() {
         setError('');
     
         try {
-            // Store submission data in Firebase
             const submissionData = {
                 ...formData,
                 timestamp: new Date()
             };
             
-            // Add a new document to the "submissions" collection
             await addDoc(collection(db, "nutritionFormSubmissions"), submissionData);
-            
-            // Mark as submitted
             setIsSubmitted(true);
         } catch (err) {
             setError('There was an error submitting your form. Please try again.');
@@ -136,77 +123,58 @@ export default function NutritionFitness() {
         }
     };
     
-    // Health resources data with image paths
     const healthResources = [
         { 
             id: 1, 
-            name: 'Vitamin B12 & Calcium Rich Foods', 
-            description: 'A guide to foods rich in Vitamin B12 and Calcium for better health', 
-            color: 'bg-green-500', 
-            imagePath: '/images/vitamin-b12-calcium-foods.jpg', 
-            resourceTitle: 'vitamin-b12-calcium-foods.jpg'
+            name: 'Neck Exercises', 
+            description: 'A comprehensive guide to neck exercises for pain relief and strength', 
+            color: 'from-green-500 to-green-700', 
+            filePath: '/pdfs/neck-exercises.pdf', 
+            fileName: 'neck-exercises.pdf'
         },
         { 
             id: 2, 
-            name: 'Beneficial & Harmful Foods for Weak Knees', 
-            description: 'Discover the best foods for knee strength and the ones to avoid', 
-            color: 'bg-blue-500', 
-            imagePath: '/images/knee-health-foods.jpg', 
-            resourceTitle: 'knee-health-foods.jpg'
+            name: 'Planter Exercises', 
+            description: 'A detailed guide to planter exercises for foot health and strength', 
+            color: 'from-blue-500 to-blue-700', 
+            filePath: '/pdfs/planter-exercises.pdf', 
+            fileName: 'planter-exercises.pdf'
         },
         { 
             id: 3, 
-            name: 'Foods for Strong & Weak Bones', 
-            description: 'A comparison of foods that strengthen bones and those that weaken them', 
-            color: 'bg-purple-500', 
-            imagePath: '/images/bone-health-foods.jpg', 
-            resourceTitle: 'bone-health-foods.jpg'
+            name: 'Shoulder Exercises', 
+            description: 'Shoulder exercises for pain relief and strength', 
+            color: 'from-purple-500 to-purple-700', 
+            filePath: '/pdfs/shoulder-exercises.pdf', 
+            fileName: 'shoulder-exercises.pdf'
         },
         { 
             id: 4, 
-            name: 'Pelvic Lift & Hip Flexion: Simple Exercises for Stronger Joints', 
-            description: 'Strengthen your hips and core with easy step-by-step exercises for better mobility and joint health', 
-            color: 'bg-red-500', 
-            imagePath: '/images/plantar-fasciitis-benefits.jpg', 
-            resourceTitle: 'plantar-fasciitis-benefits.jpg'
+            name: 'Knee Exercises', 
+            description: 'Knee exercises for pain relief and strength', 
+            color: 'from-red-500 to-red-700', 
+            filePath: '/pdfs/knee-exercises.pdf', 
+            fileName: 'knee-exercises.pdf'
         },
         { 
             id: 5, 
-            name: 'Plantar Fasciitis Exercises: Reduce Pain & Improve Foot Strength', 
-            description: 'Simple and effective stretches to relieve heel pain, improve flexibility, and support foot health.', 
-            color: 'bg-yellow-500', 
-            imagePath: '/images/plantar-fasciitis-benefits-2.jpg', 
-            resourceTitle: 'plantar-fasciitis-benefits-2.jpg'
+            name: 'Hip Flexion Exercises', 
+            description: 'Hip flexion exercises for pain relief and strength', 
+            color: 'from-yellow-500 to-yellow-700', 
+            filePath: '/pdfs/hipflexion.pdf', 
+            fileName: 'hipflexion-exercises.pdf'
         }
     ];
     
-    // Function to handle resource download
-    const downloadResource = async (resource) => {
-        try {
-            // Fetch the image
-            const response = await fetch(resource.imagePath);
-            const blob = await response.blob();
-            
-            // Create a download link
-            const url = window.URL.createObjectURL(blob);
-            const link = document.createElement('a');
-            link.href = url;
-            link.download = resource.resourceTitle;
-            
-            // Trigger download
-            document.body.appendChild(link);
-            link.click();
-            
-            // Clean up
-            window.URL.revokeObjectURL(url);
-            document.body.removeChild(link);
-        } catch (error) {
-            console.error('Download failed:', error);
-            alert('Failed to download the image. Please try again.');
-        }
+    const downloadResource = (resource) => {
+        const link = document.createElement('a');
+        link.href = resource.filePath;
+        link.download = resource.fileName || 'download';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     };
     
-    // Calculate validation status and styling
     const getInputStatus = (field) => {
         if (field === 'phoneNumber') {
             if (!formData.phoneNumber) return 'default';
@@ -240,7 +208,7 @@ export default function NutritionFitness() {
                         {!isSubmitted ? (
                             <div className="w-full max-w-md">
                                 <div className="text-center mb-10">
-                                    <h1 className="text-3xl md:text-4xl font-bold  bg-gradient-to-r from-blue-900 to-cyan-400 text-transparent bg-clip-text mb-4">
+                                    <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-900 to-cyan-400 text-transparent bg-clip-text mb-4">
                                         Complete this form to learn about healthy food and exercise!
                                     </h1>
                                     <p className="text-gray-600">
@@ -379,9 +347,9 @@ export default function NutritionFitness() {
                         ) : (
                             <div className="w-full">
                                 <div className="text-center mb-10">
-                                    <h1 className="text-3xl md:text-4xl font-bold  bg-gradient-to-r from-blue-900 to-cyan-400 text-transparent bg-clip-text mb-4">Thank You for Submitting!</h1>
+                                    <h1 className="text-3xl md:text-4xl font-bold bg-gradient-to-r from-blue-900 to-cyan-400 text-transparent bg-clip-text mb-4">Thank You for Submitting!</h1>
                                     <p className="text-gray-600 text-lg max-w-2xl mx-auto">
-                                        Here are your health and fitness resources. Click on each card to download the respective resource.
+                                        Here are your health and fitness resources. Click on each card to download the respective PDF.
                                     </p>
                                 </div>
                                 
@@ -389,30 +357,30 @@ export default function NutritionFitness() {
                                     {healthResources.map((resource) => (
                                         <div 
                                             key={resource.id} 
-                                            className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1"
+                                            className="bg-white rounded-xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1 cursor-pointer"
+                                            onClick={() => downloadResource(resource)}
                                         >
-                                            <div className="h-48 relative overflow-hidden">
-                                                <Image
-                                                    src={resource.imagePath}
-                                                    alt={resource.name}
-                                                    fill
-                                                    className="object-cover"
-                                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                                                />
-                                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-4">
-                                                    <h2 className="text-xl font-bold text-white">{resource.name}</h2>
+                                            <div className={`h-48 bg-gradient-to-br ${resource.color} flex items-center justify-center`}>
+                                                <div className="text-white text-center p-4">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 mx-auto mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                                                    </svg>
+                                                    <span className="text-xl font-bold">{resource.name}</span>
                                                 </div>
                                             </div>
                                             <div className="p-6">
                                                 <p className="text-gray-600 mb-4">{resource.description}</p>
                                                 <button
-                                                    onClick={() => downloadResource(resource)}
-                                                    className="w-full py-2 px-4 bg bg-gradient-to-r from-blue-900 to-cyan-400  hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors duration-300 flex items-center justify-center"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        downloadResource(resource);
+                                                    }}
+                                                    className="w-full py-2 px-4 bg-gradient-to-r from-blue-900 to-cyan-400 hover:bg-indigo-700 text-white font-medium rounded-lg transition-colors duration-300 flex items-center justify-center"
                                                 >
                                                     <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
                                                     </svg>
-                                                    Download Image
+                                                    Download PDF
                                                 </button>
                                             </div>
                                         </div>
