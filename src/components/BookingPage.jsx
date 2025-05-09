@@ -342,7 +342,7 @@ const validateEmail = (email) => {
 
   return (
     <div className="max-w-4xl mx-auto p-4 mt-6 sm:p-6 bg-gray-50 rounded-lg shadow-lg">
-      <h1 className="text-2xl sm:text-3xl font-bold text-blue-700 mb-6 text-center">Book Your Consultation with Dr. Abhishek Saxena</h1>
+      <h1 className="text-2xl sm:text-3xl font-bold text-blue-700 mb-6 text-center">Book Your Consultation with Dr. Manish sharma</h1>
       
       {!firestoreReady && (
         <div className="mb-6 p-4 bg-yellow-100 border border-yellow-400 text-yellow-700 rounded-md">
