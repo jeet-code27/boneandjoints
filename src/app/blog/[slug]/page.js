@@ -30,6 +30,7 @@ export async function generateMetadata({ params }) {
   return {
     title: `${blog.title}`,
     description: blog.metaDescription || blog.excerpt || blog.content.substring(0, 160),
+    keywords: blog.tags,
     openGraph: {
       title: blog.title,
       description: blog.metaDescription || blog.excerpt || blog.content.substring(0, 160),
@@ -44,12 +45,22 @@ export async function generateMetadata({ params }) {
         },
       ],
     },
+    canonical: `https://boneandjoints.in/blog/${blog.slug}`,
+    alternates: {
+      canonical: `https://boneandjoints.in/blog/${blog.slug}`,
+    },
     twitter: {
       card: 'summary_large_image',
       title: blog.title,
       description: blog.metaDescription || blog.excerpt || blog.content.substring(0, 160),
       images: [blog.image || '/images/placeholder.jpg'],
     },
+     other: {
+    'application-name': 'Bone & Joints Clinic',
+    'author': 'Dr. Abhishek Saxena',
+    'generator': 'Next.js',
+    'theme-color': '#ffffff',
+  },
   };
 }
 

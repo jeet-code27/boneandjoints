@@ -16,7 +16,7 @@ export const metadata = {
   description: 'Dr. Abhishek Saxena is a leading orthopedic surgeon in Ajmer providing advanced bone and joint treatments. Visit Our Clinic for expert orthopedic care, joint replacements, and sports injury treatments.',
   keywords: 'orthopedic surgeon Ajmer, bone specialist Ajmer, joint replacement surgeon, Dr. Abhishek Saxena, best orthopedic doctor in Ajmer, sports injury treatment, fracture treatment, knee replacement, hip replacement, Ajmer orthopedic clinic',
   openGraph: {
-    title: 'Leading Orthopedic Surgeon in Ajmer | Dr. Abhishek Saxena',
+    title: 'Best Orthopedic Surgeon in Ajmer | Dr. Abhishek Saxena',
     description: 'Expert orthopedic care for bone and joint problems at Bone & Joints Clinic in Ajmer. Specializing in joint replacements, fractures, and sports injuries.',
     images: [
       {
