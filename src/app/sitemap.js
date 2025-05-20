@@ -111,7 +111,9 @@ export default async function sitemap() {
       '/blog/orthopedic-care-sports-injury-prevention-recovery',
       '/blog/knee-replacement-surgery-ajmer-expectations-preparation',
       '/blog/best-arthroscopy-surgery-ajmer-joint-pain-treatment',
-      '/blog/best-bone-specialist-doctor-in-ajmer-dr-abhishek-saxena'
+      '/blog/best-bone-specialist-doctor-in-ajmer-dr-abhishek-saxena',
+      '/blog/best-back-pain-specialist-surgeon-in-ajmer-dr-abhishek-saxena',
+
     ].map(path => ({
       url: `${baseUrl}${path}`,
       lastModified: currentDate,
