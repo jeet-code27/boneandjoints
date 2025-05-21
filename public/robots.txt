@@ -3,7 +3,7 @@ User-agent: *
 Allow: /
 
 # Host
-Host: https://www.boneandjoints.in
+Host: https://boneandjoints.in
 
 # Sitemaps
-Sitemap: https://www.boneandjoints.in/sitemap.xml
+Sitemap: https://boneandjoints.in/sitemap.xml
