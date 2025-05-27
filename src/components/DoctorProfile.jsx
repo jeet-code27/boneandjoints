@@ -1,13 +1,63 @@
-import React from 'react';
+"use client";
+import React, { useRef } from 'react';
 import Image from 'next/image';
+import { motion, useInView } from 'framer-motion';
 
 const DoctorProfile = () => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, amount: 0.1 });
+
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.2,
+        delayChildren: 0.3
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.6,
+        ease: "easeOut"
+      }
+    }
+  };
+
+  const imageVariants = {
+    hidden: { scale: 0.9, opacity: 0 },
+    visible: {
+      scale: 1,
+      opacity: 1,
+      transition: {
+        duration: 0.8,
+        ease: "backOut"
+      }
+    }
+  };
+
   return (
     <div className="min-h-screen bg-white">
       <div className="container mx-auto px-4 py-12">
-        <div className="flex flex-col lg:flex-row items-start gap-12">
+        <motion.div 
+          ref={ref}
+          className="flex flex-col lg:flex-row items-start gap-12"
+          initial="hidden"
+          animate={isInView ? "visible" : "hidden"}
+          variants={containerVariants}
+        >
           {/* Image Section */}
-          <div className="lg:ml-10 lg:w-[30%] w-full">
+          <motion.div 
+            className="lg:ml-10 lg:w-[30%] w-full"
+            variants={imageVariants}
+          >
             <div className="rounded-full bg-[#C3E1F2] overflow-hidden">
               <div className="relative w-full" style={{ maxHeight: '650px' }}>
                 <Image
@@ -20,22 +70,42 @@ const DoctorProfile = () => {
                 />
               </div>
             </div>
-          </div>
+          </motion.div>
 
           {/* Content Section */}
-          <div className="lg:w-3/5 space-y-6 sm:mt-20">
-            <h2 className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-[#1E0B9B] to-[#07CCEC] inline-block text-transparent bg-clip-text">
+          <motion.div 
+            className="lg:w-3/5 space-y-6 sm:mt-20"
+            variants={containerVariants}
+          >
+            <motion.h2 
+              className="text-5xl md:text-6xl font-bold bg-gradient-to-r from-[#1E0B9B] to-[#07CCEC] inline-block text-transparent bg-clip-text"
+              variants={itemVariants}
+            >
               Dr. Abhishek Saxena
-            </h2>
-            <h1 className="text-3xl md:text-4xl font-semibold text-gray-700">
+            </motion.h2>
+            
+            <motion.h1 
+              className="text-3xl md:text-4xl font-semibold text-gray-700"
+              variants={itemVariants}
+            >
               Orthopedic Surgeon In Ajmer
-            </h1>
-            <h3 className="text-2xl text-gray-600 font-medium">
+            </motion.h1>
+            
+            <motion.h3 
+              className="text-2xl text-gray-600 font-medium"
+              variants={itemVariants}
+            >
               Senior Consultant - Shoulder, Knee & Sport Injuries
-            </h3>
+            </motion.h3>
 
-            <div className="space-y-4 text-gray-600">
-              <p className="leading-relaxed text-lg text-justify">
+            <motion.div 
+              className="space-y-4 text-gray-600"
+              variants={itemVariants}
+            >
+              <motion.p 
+                className="leading-relaxed text-lg text-justify"
+                variants={itemVariants}
+              >
                 Welcome to the practice of Dr. Abhishek Saxena, Senior Consultant 
                 specializing in shoulder, knee, and sports injuries. Dr. Abhishek Saxena's 
                 academic journey reflects his commitment to excellence, starting 
@@ -47,10 +117,10 @@ const DoctorProfile = () => {
                 Orthopedics from Tejasvini Hospital & SSCOT, one of Karnataka's 
                 premier orthopedic centers. Dr. Saxena is dedicated to providing 
                 world-class orthopedic care tailored to individual needs.
-              </p>
-            </div>
-          </div>
-        </div>
+              </motion.p>
+            </motion.div>
+          </motion.div>
+        </motion.div>
       </div>
     </div>
   );

@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useInView } from 'react-intersection-observer';
 
 const procedures = {
     'Slap Tears': {
@@ -111,6 +112,18 @@ const procedures = {
 
 const AllCondition = () => {
   const [selectedProcedure, setSelectedProcedure] = useState('Shoulder Arthroscopy');
+  const [titleRef, titleInView] = useInView({
+    triggerOnce: true,
+    threshold: 0.1
+  });
+  const [buttonsRef, buttonsInView] = useInView({
+    triggerOnce: true,
+    threshold: 0.1
+  });
+  const [contentRef, contentInView] = useInView({
+    triggerOnce: true,
+    threshold: 0.1
+  });
 
   const proceduresList = [
     ['Slap Tears', 'Knee Arthroscopy', 'Knee Replacement', 'ACL Injury', 'PCL Injury', 'Meniscus Injury', 'MPFL/MCL/LCL Injury'],
@@ -120,13 +133,25 @@ const AllCondition = () => {
 
   return (
     <div className="max-w-6xl mx-auto p-6 bg-gray-50">
-      <h2 className="text-4xl font-bold text-center mb-8 bg-gradient-to-r from-blue-900 to-cyan-500 text-transparent bg-clip-text">Pains We Treat</h2>
-      
-      <div className="text-center mb-6">
-        <p className="text-gray-600">Some of our common areas of expertise have been listed below</p>
-      </div>
+      <motion.div
+        ref={titleRef}
+        initial={{ opacity: 0, y: 20 }}
+        animate={titleInView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.5 }}
+      >
+        <h2 className="text-4xl font-bold text-center mb-8 bg-gradient-to-r from-blue-900 to-cyan-500 text-transparent bg-clip-text">Pains We Treat</h2>
+        <div className="text-center mb-6">
+          <p className="text-gray-600">Some of our common areas of expertise have been listed below</p>
+        </div>
+      </motion.div>
 
-      <div className="space-y-4 mb-12">
+      <motion.div
+        ref={buttonsRef}
+        initial={{ opacity: 0, y: 20 }}
+        animate={buttonsInView ? { opacity: 1, y: 0 } : {}}
+        transition={{ duration: 0.5, delay: 0.2 }}
+        className="space-y-4 mb-12"
+      >
         {proceduresList.map((row, rowIndex) => (
           <div key={rowIndex} className="flex flex-wrap gap-4 justify-center text-black">
             {row.map((procedure) => (
@@ -146,55 +171,59 @@ const AllCondition = () => {
             ))}
           </div>
         ))}
+      </motion.div>
+
+      <div ref={contentRef}>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={selectedProcedure}
+            initial={{ opacity: 0, y: 20 }}
+            animate={contentInView ? { opacity: 1, y: 0 } : {}}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
+            className="grid md:grid-cols-2 gap-8 bg-white rounded-xl p-6 text-black shadow-lg"
+          >
+            <motion.div
+              initial={{ opacity: 0, x: -20 }}
+              animate={contentInView ? { opacity: 1, x: 0 } : {}}
+              transition={{ delay: 0.2 }}
+              className="relative w-full h-80"
+            >
+              <Image
+                src={procedures[selectedProcedure]?.image || '/api/placeholder/600/400'}
+                alt={selectedProcedure}
+                fill
+                sizes="(max-width: 768px) 100vw, 50vw"
+                priority={selectedProcedure === 'Shoulder Arthroscopy'}
+                className="object-fit rounded-lg"
+              />
+              <div className="absolute inset-0 bg-gradient-to-r from-blue-900/10 to-cyan-500/10 rounded-lg" />
+            </motion.div>
+
+            <motion.div
+              initial={{ opacity: 0, x: 20 }}
+              animate={contentInView ? { opacity: 1, x: 0 } : {}}
+              transition={{ delay: 0.3 }}
+              className="flex flex-col justify-center"
+            >
+              <h2 className="text-3xl font-bold mb-4">{selectedProcedure}</h2>
+              <p className="text-gray-600 mb-6">
+                {procedures[selectedProcedure]?.description || 'Description coming soon...'}
+              </p>
+              
+              <Link href={`${procedures[selectedProcedure]?.slug || selectedProcedure.toLowerCase().replace(/ /g, '-')}`}>
+                <motion.button
+                  className="px-6 py-2 rounded-lg text-white bg-gradient-to-r from-[#1E0B9B] to-[#07CCEC] hover:shadow-lg"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  Read More
+                </motion.button>
+              </Link>
+            </motion.div>
+          </motion.div>
+        </AnimatePresence>
       </div>
-
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={selectedProcedure}
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -20 }}
-          transition={{ duration: 0.3 }}
-          className="grid md:grid-cols-2 gap-8 bg-white rounded-xl p-6 text-black shadow-lg"
-        >
-          <motion.div
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="relative w-full h-80"
-          >
-            <Image
-              src={procedures[selectedProcedure]?.image || '/api/placeholder/600/400'}
-              alt={selectedProcedure}
-              fill
-              sizes="(max-width: 768px) 100vw, 50vw"
-              priority={selectedProcedure === 'Shoulder Arthroscopy'}
-              className="object-fit rounded-lg"
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-blue-900/10 to-cyan-500/10 rounded-lg" />
-          </motion.div>
-
-          <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            className="flex flex-col justify-center"
-          >
-            <h2 className="text-3xl font-bold mb-4">{selectedProcedure}</h2>
-            <p className="text-gray-600 mb-6">
-              {procedures[selectedProcedure]?.description || 'Description coming soon...'}
-            </p>
-            
-            <Link href={`${procedures[selectedProcedure]?.slug || selectedProcedure.toLowerCase().replace(/ /g, '-')}`}>
-              <motion.button
-                className="px-6 py-2 rounded-lg text-white bg-gradient-to-r from-[#1E0B9B] to-[#07CCEC] hover:shadow-lg"
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                Read More
-              </motion.button>
-            </Link>
-          </motion.div>
-        </motion.div>
-      </AnimatePresence>
     </div>
   );
 };

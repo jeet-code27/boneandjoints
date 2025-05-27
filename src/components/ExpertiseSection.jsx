@@ -4,83 +4,108 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { useInView } from 'react-intersection-observer';
 import Carousel from 'react-multi-carousel';
-// Note: You'll need to add this import to your layout or page where this component is used
 import 'react-multi-carousel/lib/styles.css';
 
 // Animations configuration
 const fadeInUp = {
-  initial: { opacity: 0, y: 20 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.5 }
+  hidden: { opacity: 0, y: 20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.5 } }
 };
 
 const fadeInDown = {
-  initial: { opacity: 0, y: -20 },
-  animate: { opacity: 1, y: 0 },
-  transition: { duration: 0.6 }
+  hidden: { opacity: 0, y: -20 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } }
+};
+
+const cardVariants = {
+  hidden: { opacity: 0, scale: 0.9 },
+  visible: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 0.5,
+      ease: "easeOut"
+    }
+  }
 };
 
 // Custom arrow components
 const CustomRightArrow = ({ onClick }) => {
   return (
-    <button
+    <motion.button
       onClick={onClick}
       className="absolute right-0 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white shadow-lg flex items-center justify-center text-gray-800 hover:bg-gray-100 transition-colors border border-gray-200 z-10 mr-2"
       aria-label="Next slide"
+      whileHover={{ scale: 1.1 }}
+      whileTap={{ scale: 0.9 }}
     >
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6">
         <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
       </svg>
-    </button>
+    </motion.button>
   );
 };
 
 const CustomLeftArrow = ({ onClick }) => {
   return (
-    <button
+    <motion.button
       onClick={onClick}
       className="absolute left-0 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white shadow-lg flex items-center justify-center text-gray-800 hover:bg-gray-100 transition-colors border border-gray-200 z-10 ml-2"
       aria-label="Previous slide"
+      whileHover={{ scale: 1.1 }}
+      whileTap={{ scale: 0.9 }}
     >
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2.5} stroke="currentColor" className="w-6 h-6">
         <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" />
       </svg>
-    </button>
+    </motion.button>
   );
 };
 
 // Custom dot component
 const CustomDot = ({ onClick, active }) => {
   return (
-    <button
+    <motion.button
       className={`h-3 w-3 mx-1 rounded-full ${active ? 'bg-blue-600' : 'bg-gray-300'}`}
       onClick={onClick}
+      whileHover={{ scale: 1.3 }}
+      whileTap={{ scale: 0.8 }}
     />
   );
 };
 
 // Card Component
-const ExpertiseCard = ({ title, description, imageSrc, linkUrl }) => {
+const ExpertiseCard = ({ title, description, imageSrc, linkUrl, inView }) => {
   return (
-    <div className="bg-white rounded-lg shadow-xl p-6 flex flex-col items-center h-full m-2">
-      <div className="relative w-full h-48 mb-4 overflow-hidden rounded-lg">
+    <motion.div
+      className="bg-white rounded-lg shadow-xl p-6 flex flex-col items-center h-full m-2"
+      variants={cardVariants}
+      initial="hidden"
+      animate={inView ? "visible" : "hidden"}
+      whileHover={{ y: -5, transition: { duration: 0.2 } }}
+    >
+      <motion.div 
+        className="relative w-full h-48 mb-4 overflow-hidden rounded-lg"
+        whileHover={{ scale: 1.02 }}
+      >
         <Image
           src={imageSrc}
           alt={title}
           fill
           sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-          className="object-cover transition-transform duration-300 hover:scale-105"
+          className="object-cover transition-transform duration-300"
           priority={false}
         />
-      </div>
+      </motion.div>
       <h3 className="text-xl font-bold mb-3 text-gray-800">{title}</h3>
       <p className="text-gray-600 text-center mb-4">{description}</p>
       
       <div className="mt-auto">
         <Link href={linkUrl}>
           <motion.button
-            whileHover={{ scale: 1.05 }}
+            whileHover={{ scale: 1.05, boxShadow: "0 5px 15px rgba(7, 204, 236, 0.3)" }}
             whileTap={{ scale: 0.95 }}
             className="bg-gradient-to-r from-[#1E0B9B] to-[#07CCEC] text-white px-6 py-2 rounded-full font-semibold hover:shadow-lg transition-shadow"
           >
@@ -88,12 +113,22 @@ const ExpertiseCard = ({ title, description, imageSrc, linkUrl }) => {
           </motion.button>
         </Link>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
 // Main Component
 const ExpertiseSection = () => {
+  const [sectionRef, sectionInView] = useInView({
+    triggerOnce: true,
+    threshold: 0.1
+  });
+
+  const [carouselRef, carouselInView] = useInView({
+    triggerOnce: true,
+    threshold: 0.1
+  });
+
   const expertiseData = [
     {
       title: "Shoulder Arthroscopy",
@@ -107,12 +142,6 @@ const ExpertiseSection = () => {
       imageSrc: "/images/kneearthroscopy.jpg",
       linkUrl: "/arthroscopy/knee-arthroscopy"
     },
-    // {
-    //   title: "Hip Replacement",
-    //   description: "Hip replacement surgery offers relief from severe hip arthritis and fractures. Advanced techniques are used to improve mobility and provide pain-free living for patients suffering from hip conditions.",
-    //   imageSrc: "/images/hipreplacement.jpg",
-    //   linkUrl: "/joint-replacement/hip"
-    // },
     {
       title: "Knee Replacement",
       description: "Knee replacement surgery is a solution for chronic knee pain caused by arthritis, injury, or degeneration. Using state-of-the-art technology, it provides long-term relief and improved knee function.",
@@ -138,7 +167,6 @@ const ExpertiseSection = () => {
       linkUrl: "/sports-injury/sprains"
     }
   ];
-  
 
   const responsive = {
     superLargeDesktop: {
@@ -164,11 +192,10 @@ const ExpertiseSection = () => {
   };
 
   return (
-    <section className="py-16 px-4 bg-gray-50">
+    <section className="py-16 px-4 bg-gray-50" ref={sectionRef}>
       <motion.div
-        initial="initial"
-        whileInView="animate"
-        viewport={{ once: true }}
+        initial="hidden"
+        animate={sectionInView ? "visible" : "hidden"}
         variants={fadeInDown}
         className="text-center mb-12"
       >
@@ -184,13 +211,11 @@ const ExpertiseSection = () => {
         </h3>
       </motion.div>
       
-      <div className="max-w-7xl mx-auto relative">
+      <div className="max-w-7xl mx-auto relative" ref={carouselRef}>
         <motion.div
-          initial="initial"
-          whileInView="animate"
-          viewport={{ once: true }}
+          initial="hidden"
+          animate={carouselInView ? "visible" : "hidden"}
           variants={fadeInUp}
-          className="" // Add horizontal padding to make room for arrows
         >
           <Carousel
             responsive={responsive}
@@ -210,7 +235,11 @@ const ExpertiseSection = () => {
             customDot={<CustomDot />}
           >
             {expertiseData.map((item, index) => (
-              <ExpertiseCard key={index} {...item} />
+              <ExpertiseCard 
+                key={index} 
+                {...item} 
+                inView={carouselInView}
+              />
             ))}
           </Carousel>
         </motion.div>
