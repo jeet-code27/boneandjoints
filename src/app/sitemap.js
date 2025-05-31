@@ -114,6 +114,8 @@ export default async function sitemap() {
       '/blog/best-bone-specialist-doctor-in-ajmer-dr-abhishek-saxena',
       '/blog/top-orthopedic-doctor-in-ajmer-dr-abhishek-saxena',
       '/blog/sports-injury-specialist-in-ajmer',
+      '/blog/orthopedic-trauma-care-ajmer-dr-abhishek-saxena',
+
 
 
 
