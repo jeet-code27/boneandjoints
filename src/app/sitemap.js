@@ -115,10 +115,7 @@ export default async function sitemap() {
       '/blog/top-orthopedic-doctor-in-ajmer-dr-abhishek-saxena',
       '/blog/sports-injury-specialist-in-ajmer',
       '/blog/orthopedic-trauma-care-ajmer-dr-abhishek-saxena',
-
-
-
-
+       '/blog/best-shoulder-pain-treatment-ajmer-dr-abhishek-saxena'
     ].map(path => ({
       url: `${baseUrl}${path}`,
       lastModified: currentDate,
