@@ -19,12 +19,124 @@ export default function NutritionFitness() {
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState('');
 
-    const validatePhoneNumber = (phone) => {
-        return /^\d{10}$/.test(phone);
+    // Enhanced Indian phone number validation
+    const validateIndianPhoneNumber = (phone) => {
+        // Check if it's exactly 10 digits
+        if (!/^\d{10}$/.test(phone)) return false;
+        
+        // Check if it starts with valid Indian mobile prefixes (6, 7, 8, 9)
+        if (!/^[6-9]/.test(phone)) return false;
+        
+        // Check for invalid patterns
+        const invalidPatterns = [
+            /^(\d)\1{9}$/, // All same digits (e.g., 7777777777)
+            /^(\d)\1{7,}/, // 8 or more consecutive same digits
+            /^(0123456789|1234567890|9876543210|0987654321)$/, // Sequential patterns
+            /^([6-9])\1{4,}/, // 5 or more consecutive same digits starting with valid prefix
+        ];
+        
+        // Check for common fake numbers
+        const commonFakeNumbers = [
+            '9999999999', '8888888888', '7777777777', '6666666666',
+            '1234567890', '0987654321', '9876543210', '1111111111',
+            '2222222222', '3333333333', '4444444444', '5555555555',
+            '0000000000', '1010101010', '2020202020', '3030303030',
+            '9090909090', '8080808080', '7070707070', '6060606060'
+        ];
+        
+        if (commonFakeNumbers.includes(phone)) return false;
+        
+        // Check for invalid patterns
+        for (const pattern of invalidPatterns) {
+            if (pattern.test(phone)) return false;
+        }
+        
+        // Additional checks for suspicious patterns
+        // Check for too many repeated digits (more than 4 of the same digit)
+        const digitCounts = {};
+        for (const digit of phone) {
+            digitCounts[digit] = (digitCounts[digit] || 0) + 1;
+            if (digitCounts[digit] > 4) return false;
+        }
+        
+        // Check for alternating patterns like 9090909090, 8181818181
+        let isAlternating = true;
+        for (let i = 2; i < phone.length; i++) {
+            if (phone[i] !== phone[i % 2]) {
+                isAlternating = false;
+                break;
+            }
+        }
+        if (isAlternating) return false;
+        
+        return true;
     };
 
     const validateName = (name) => {
         return /^[A-Za-z\s]+$/.test(name);
+    };
+
+    // Function to get detailed error message for phone validation
+    const getPhoneValidationError = (phone) => {
+        if (!phone) return '';
+        
+        if (phone.length !== 10) {
+            return 'Phone number must be exactly 10 digits';
+        }
+        
+        if (!/^\d{10}$/.test(phone)) {
+            return 'Phone number should contain only digits';
+        }
+        
+        if (!/^[6-9]/.test(phone)) {
+            return 'Indian mobile numbers must start with 6, 7, 8, or 9';
+        }
+        
+        // Check for all same digits
+        if (/^(\d)\1{9}$/.test(phone)) {
+            return 'Please enter a valid mobile number (all digits cannot be the same)';
+        }
+        
+        // Check for common fake numbers
+        const commonFakeNumbers = [
+            '9999999999', '8888888888', '7777777777', '6666666666',
+            '1234567890', '0987654321', '9876543210', '1111111111',
+            '2222222222', '3333333333', '4444444444', '5555555555',
+            '0000000000', '1010101010', '2020202020', '3030303030',
+            '9090909090', '8080808080', '7070707070', '6060606060'
+        ];
+        
+        if (commonFakeNumbers.includes(phone)) {
+            return 'Please enter a valid mobile number (this appears to be a fake number)';
+        }
+        
+        // Check for too many repeated digits
+        const digitCounts = {};
+        for (const digit of phone) {
+            digitCounts[digit] = (digitCounts[digit] || 0) + 1;
+            if (digitCounts[digit] > 4) {
+                return 'Please enter a valid mobile number (too many repeated digits)';
+            }
+        }
+        
+        // Check for alternating patterns
+        let isAlternating = true;
+        for (let i = 2; i < phone.length; i++) {
+            if (phone[i] !== phone[i % 2]) {
+                isAlternating = false;
+                break;
+            }
+        }
+        if (isAlternating) {
+            return 'Please enter a valid mobile number (alternating pattern detected)';
+        }
+        
+        // Check for consecutive same digits (5 or more)
+        if (/(\d)\1{4,}/.test(phone)) {
+            return 'Please enter a valid mobile number (too many consecutive same digits)';
+        }
+        
+        return '';
     };
 
     const handleChange = (e) => {
@@ -56,19 +168,11 @@ export default function NutritionFitness() {
     
     useEffect(() => {
         if (formData.phoneNumber && formData.phoneNumber.length > 0) {
-            if (formData.phoneNumber.length < 10) {
-                setErrors(prev => ({
-                    ...prev, 
-                    phoneNumber: 'Phone number must be 10 digits'
-                }));
-            } else if (!validatePhoneNumber(formData.phoneNumber)) {
-                setErrors(prev => ({
-                    ...prev, 
-                    phoneNumber: 'Phone number should contain only 10 digits'
-                }));
-            } else {
-                setErrors(prev => ({...prev, phoneNumber: ''}));
-            }
+            const errorMessage = getPhoneValidationError(formData.phoneNumber);
+            setErrors(prev => ({
+                ...prev, 
+                phoneNumber: errorMessage
+            }));
         }
     }, [formData.phoneNumber]);
 
@@ -96,10 +200,11 @@ export default function NutritionFitness() {
             return;
         }
         
-        if (!validatePhoneNumber(formData.phoneNumber)) {
+        if (!validateIndianPhoneNumber(formData.phoneNumber)) {
+            const errorMessage = getPhoneValidationError(formData.phoneNumber) || 'Please enter a valid Indian mobile number';
             setErrors(prev => ({
                 ...prev, 
-                phoneNumber: 'Phone number must be exactly 10 digits'
+                phoneNumber: errorMessage
             }));
             return;
         }
@@ -179,7 +284,7 @@ export default function NutritionFitness() {
         if (field === 'phoneNumber') {
             if (!formData.phoneNumber) return 'default';
             if (errors.phoneNumber) return 'error';
-            if (validatePhoneNumber(formData.phoneNumber)) return 'success';
+            if (validateIndianPhoneNumber(formData.phoneNumber)) return 'success';
             return 'default';
         }
         return 'default';
@@ -263,8 +368,8 @@ export default function NutritionFitness() {
                                     
                                     <div className="mb-6">
                                         <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700 mb-2 flex items-center">
-                                            Phone Number
-                                            <span className="text-xs ml-2 text-gray-500">(Exactly 10 digits)</span>
+                                            Mobile Number
+                                            <span className="text-xs ml-2 text-gray-500">(Indian mobile number)</span>
                                         </label>
                                         <div className="relative">
                                             <input
@@ -281,7 +386,7 @@ export default function NutritionFitness() {
                                                     'border-gray-300 focus:ring-indigo-500'} 
                                                     focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200
                                                     ${formData.phoneNumber.length > 0 ? 'pr-10' : ''}`}
-                                                placeholder="Enter your 10-digit phone number"
+                                                placeholder="Enter your 10-digit mobile number"
                                             />
                                             {getInputStatus('phoneNumber') === 'success' && (
                                                 <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
@@ -307,9 +412,17 @@ export default function NutritionFitness() {
                                             </div>
                                         )}
                                         <div className="mt-2 text-xs text-gray-500">
-                                            <ul className="list-disc list-inside">
-                                                <li className={`${validatePhoneNumber(formData.phoneNumber) ? 'text-green-500' : ''}`}>Must be exactly 10 digits</li>
-                                                <li className={`${/^\d+$/.test(formData.phoneNumber) ? 'text-green-500' : ''}`}>Only numbers are allowed (0-9)</li>
+                                            <ul className="list-disc list-inside space-y-1">
+                                                <li className={`${formData.phoneNumber.length === 10 ? 'text-green-500' : ''}`}>
+                                                    Must be exactly 10 digits
+                                                </li>
+                                               
+                                                <li className={`${/^\d+$/.test(formData.phoneNumber) ? 'text-green-500' : ''}`}>
+                                                    Only numbers are allowed (0-9)
+                                                </li>
+                                                <li className={`${validateIndianPhoneNumber(formData.phoneNumber) ? 'text-green-500' : ''}`}>
+                                                    Must be a valid Indian mobile number
+                                                </li>
                                             </ul>
                                         </div>
                                     </div>
@@ -329,8 +442,8 @@ export default function NutritionFitness() {
                                     <button 
                                         type="submit" 
                                         className={`w-full py-3 px-4 rounded-lg text-white font-medium transition-all duration-300 
-                                            ${isLoading || errors.phoneNumber ? 'bg-indigo-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700 shadow-lg hover:shadow-indigo-200'}`}
-                                        disabled={isLoading || errors.phoneNumber !== ''}
+                                            ${isLoading || errors.phoneNumber || errors.fullName ? 'bg-indigo-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700 shadow-lg hover:shadow-indigo-200'}`}
+                                        disabled={isLoading || errors.phoneNumber !== '' || errors.fullName !== ''}
                                     >
                                         {isLoading ? (
                                             <span className="flex items-center justify-center">
