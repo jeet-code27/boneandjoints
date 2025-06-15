@@ -128,7 +128,7 @@ const Footer = () => {
 
           {/* Copyright Bar */}
           <div className="mt-12 pt-6 border-t border-gray-300 text-center text-sm text-gray-600">
-            <p>
+            {/* <p>
               Copyright © {new Date().getFullYear()}  | Powered by{' '}
               <a 
                 href="https://seocialmedia.in" 
@@ -138,7 +138,7 @@ const Footer = () => {
               >
                 SEOcial Media Solutions
               </a>
-            </p>
+            </p> */}
           </div>
         </div>
       </footer>
