@@ -9,11 +9,13 @@ export default function NutritionFitness() {
     const [formData, setFormData] = useState({
         fullName: '',
         email: '',
-        phoneNumber: ''
+        phoneNumber: '',
+        city: ''
     });
     const [errors, setErrors] = useState({
         fullName: '',
-        phoneNumber: ''
+        phoneNumber: '',
+        city: ''
     });
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
@@ -74,6 +76,11 @@ export default function NutritionFitness() {
 
     const validateName = (name) => {
         return /^[A-Za-z\s]+$/.test(name);
+    };
+
+    const validateCity = (city) => {
+        // Allow letters, spaces, and common punctuation in city names
+        return /^[A-Za-z\s\-\.']+$/.test(city);
     };
 
     // Function to get detailed error message for phone validation
@@ -158,6 +165,13 @@ export default function NutritionFitness() {
                     [name]: value
                 }));
             }
+        } else if (name === 'city') {
+            if (value === '' || validateCity(value)) {
+                setFormData(prev => ({
+                    ...prev,
+                    [name]: value
+                }));
+            }
         } else {
             setFormData(prev => ({
                 ...prev,
@@ -188,6 +202,19 @@ export default function NutritionFitness() {
             }
         }
     }, [formData.fullName]);
+
+    useEffect(() => {
+        if (formData.city && formData.city.length > 0) {
+            if (!validateCity(formData.city)) {
+                setErrors(prev => ({
+                    ...prev, 
+                    city: 'City name should contain only alphabets, spaces, hyphens, apostrophes, and periods'
+                }));
+            } else {
+                setErrors(prev => ({...prev, city: ''}));
+            }
+        }
+    }, [formData.city]);
     
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -205,6 +232,14 @@ export default function NutritionFitness() {
             setErrors(prev => ({
                 ...prev, 
                 phoneNumber: errorMessage
+            }));
+            return;
+        }
+
+        if (formData.city && !validateCity(formData.city)) {
+            setErrors(prev => ({
+                ...prev, 
+                city: 'City name should contain only alphabets, spaces, hyphens, apostrophes, and periods'
             }));
             return;
         }
@@ -426,6 +461,32 @@ export default function NutritionFitness() {
                                             </ul>
                                         </div>
                                     </div>
+
+                                    <div className="mb-6">
+                                        <label htmlFor="city" className="block text-sm font-medium text-gray-700 mb-2">
+                                            City
+                                        </label>
+                                        <input
+                                            type="text"
+                                            id="city"
+                                            name="city"
+                                            value={formData.city}
+                                            onChange={handleChange}
+                                            required
+                                            className={`w-full px-4 py-3 rounded-lg border 
+                                                ${errors.city ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 focus:ring-indigo-500'} 
+                                                focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200`}
+                                            placeholder="Enter your city name"
+                                        />
+                                        {errors.city && (
+                                            <div className="mt-2 flex items-center text-sm text-red-600">
+                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 mr-1" viewBox="0 0 20 20" fill="currentColor">
+                                                    <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                                                </svg>
+                                                {errors.city}
+                                            </div>
+                                        )}
+                                    </div>
                                     
                                     <div className="mb-6 p-4 bg-gray-50 rounded-lg border border-gray-200">
                                         <p className="text-xs text-gray-600 leading-relaxed">
@@ -442,8 +503,8 @@ export default function NutritionFitness() {
                                     <button 
                                         type="submit" 
                                         className={`w-full py-3 px-4 rounded-lg text-white font-medium transition-all duration-300 
-                                            ${isLoading || errors.phoneNumber || errors.fullName ? 'bg-indigo-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700 shadow-lg hover:shadow-indigo-200'}`}
-                                        disabled={isLoading || errors.phoneNumber !== '' || errors.fullName !== ''}
+                                            ${isLoading || errors.phoneNumber || errors.fullName || errors.city ? 'bg-indigo-400 cursor-not-allowed' : 'bg-indigo-600 hover:bg-indigo-700 shadow-lg hover:shadow-indigo-200'}`}
+                                        disabled={isLoading || errors.phoneNumber !== '' || errors.fullName !== '' || errors.city !== ''}
                                     >
                                         {isLoading ? (
                                             <span className="flex items-center justify-center">
