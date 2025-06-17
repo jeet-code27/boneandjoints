@@ -694,7 +694,7 @@ const DeleteConfirmationModal = ({ booking, onConfirm, onCancel }) => {
           )}
         </div>
 
-        {/* Nutrition Fitness Submissions */}
+       
       {/* Nutrition Fitness Submissions */}
 <div className="bg-white rounded-lg shadow-md overflow-hidden">
   <h2 className="text-xl font-bold text-gray-800 p-4">Nutrition Fitness Form Submissions</h2>
