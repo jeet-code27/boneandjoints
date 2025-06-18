@@ -363,7 +363,7 @@ const BookingSystem = () => {
         transition={{ duration: 0.5 }}
         className="text-2xl sm:text-3xl font-bold text-blue-700 mb-6 text-center"
       >
-        Book Your Consultation with Dr. Manish sharma
+        Book Your Consultation with Dr. Abhishek Saxena
       </motion.h1>
       
       {!firestoreReady && (
